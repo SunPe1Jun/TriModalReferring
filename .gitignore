@@ -1,0 +1,42 @@
+# Python/cache
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+
+# Local environments/offload
+.venv/
+venv/
+miniconda3/
+.offload*/
+
+# Data, model outputs, generated media
+data/
+data_abandoned/
+sample_data/
+datagrounding_overlays/
+logs/
+exam2/outputs*/
+exam2/selected_panel_export_manifest.csv*
+exam2/*.log
+exam3/outputs*/
+exam3/*.log
+*.jpg
+*.jpeg
+*.png
+*.mp4
+*.wav
+*.xlsx
+*.csv
+*.tsv
+*.jsonl
+
+# Local/editor/system files
+.DS_Store
+.idea/
+.vscode/
+
+
+# Internal handoff notes
+THREAD_HANDOFF_CODE.md
