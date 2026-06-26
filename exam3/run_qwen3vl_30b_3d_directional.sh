@@ -13,6 +13,7 @@ MAX_NEW_TOKENS="${MAX_NEW_TOKENS:-256}"
 LOCAL_FILES_ONLY="${LOCAL_FILES_ONLY:-1}"
 OVERWRITE="${OVERWRITE:-0}"
 CONTINUE_ON_ERROR="${CONTINUE_ON_ERROR:-1}"
+SKIP_MISSING_GT_ANCHORS="${SKIP_MISSING_GT_ANCHORS:-0}"
 EVIDENCE_PANEL_STRATEGY="${EVIDENCE_PANEL_STRATEGY:-highest_score}"
 PYTHON_BIN="${PYTHON_BIN:-python}"
 
@@ -40,6 +41,11 @@ if [[ -n "${SCENES:-}" ]]; then
   pred_args+=(--scenes "${scene_array[@]}")
 fi
 
+if [[ -n "${SAMPLE_KEYS:-}" ]]; then
+  read -r -a sample_key_array <<< "$SAMPLE_KEYS"
+  pred_args+=(--sample_keys "${sample_key_array[@]}")
+fi
+
 if [[ "$LOCAL_FILES_ONLY" == "1" ]]; then
   pred_args+=(--local_files_only)
 fi
@@ -50,6 +56,10 @@ fi
 
 if [[ "$CONTINUE_ON_ERROR" == "1" ]]; then
   pred_args+=(--continue_on_error)
+fi
+
+if [[ "$SKIP_MISSING_GT_ANCHORS" == "1" ]]; then
+  pred_args+=(--skip_missing_gt_anchors)
 fi
 
 cd "$REPO_ROOT"

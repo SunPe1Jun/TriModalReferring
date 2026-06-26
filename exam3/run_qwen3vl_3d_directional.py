@@ -73,8 +73,18 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--start_index", type=int, default=0, help="Minimum row_index per scene.")
     parser.add_argument("--limit", type=int, help="Maximum row_index count per scene.")
     parser.add_argument("--scenes", nargs="*", help="Optional scenes/partitions.")
+    parser.add_argument(
+        "--sample_keys",
+        nargs="*",
+        help="Optional exact samples as scene:row_index, e.g. scene1:370 scene4_room4:36. Overrides scenes/start_index/limit.",
+    )
     parser.add_argument("--overwrite", action="store_true", help="Overwrite per-event raw output JSON.")
     parser.add_argument("--continue_on_error", action="store_true", help="Continue if one sample fails.")
+    parser.add_argument(
+        "--skip_missing_gt_anchors",
+        action="store_true",
+        help="Skip manifest groups without valid GT anchor coordinates before inference. Use for the evaluable diagnostic subset.",
+    )
     parser.add_argument(
         "--evidence_panel_strategy",
         choices=("highest_score", "first", "middle"),
@@ -137,6 +147,27 @@ def group_manifest(rows: Sequence[Mapping[str, str]]) -> Dict[Tuple[str, int], L
         if scene and row_index is not None:
             grouped[(scene, row_index)].append(row)
     return grouped
+
+
+def parse_sample_keys(items: Optional[Sequence[str]]) -> List[Tuple[str, int]]:
+    keys: List[Tuple[str, int]] = []
+    seen = set()
+    for item in items or []:
+        text = normalize_text(item)
+        if not text:
+            continue
+        if ":" not in text:
+            raise ValueError(f"sample key must be scene:row_index, got {text!r}")
+        scene, row_text = text.rsplit(":", 1)
+        row_index = parse_int(row_text)
+        scene = normalize_text(scene)
+        if not scene or row_index is None:
+            raise ValueError(f"sample key must be scene:row_index, got {text!r}")
+        key = (scene, row_index)
+        if key not in seen:
+            keys.append(key)
+            seen.add(key)
+    return keys
 
 
 def selected_key(key: Tuple[str, int], args: argparse.Namespace) -> bool:
@@ -492,7 +523,20 @@ def main() -> None:
 
     manifest_rows = read_csv_rows(manifest_path)
     grouped = group_manifest(manifest_rows)
-    selected = [(key, grouped[key]) for key in sorted(grouped, key=lambda item: (item[0], item[1])) if selected_key(key, args)]
+    exact_keys = parse_sample_keys(args.sample_keys)
+    if exact_keys:
+        missing_keys = [key for key in exact_keys if key not in grouped]
+        if missing_keys:
+            missing_text = ", ".join(f"{scene}:{row_index}" for scene, row_index in missing_keys)
+            raise RuntimeError(f"Requested sample_keys not found in manifest: {missing_text}")
+        selected = [(key, grouped[key]) for key in exact_keys]
+    else:
+        selected = [(key, grouped[key]) for key in sorted(grouped, key=lambda item: (item[0], item[1])) if selected_key(key, args)]
+    if args.skip_missing_gt_anchors:
+        before_count = len(selected)
+        selected = [(key, rows) for key, rows in selected if gt_anchor_points(rows)]
+        skipped_count = before_count - len(selected)
+        print(f"Selected {len(selected)} samples after skipping {skipped_count} groups without GT anchors.")
     if not selected:
         raise RuntimeError("No samples selected.")
 

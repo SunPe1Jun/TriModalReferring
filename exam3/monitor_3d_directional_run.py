@@ -29,7 +29,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--interval_seconds", type=int, default=600)
     parser.add_argument("--min_valid_rate", type=float, default=0.98)
     parser.add_argument("--max_median_deg", type=float, default=15.0)
-    parser.add_argument("--min_acc30_all", type=float, default=0.70)
+    parser.add_argument("--min_acc20_all", type=float, default=0.60)
     parser.add_argument("--once", action="store_true", help="Write one progress entry and exit.")
     return parser.parse_args()
 
@@ -162,11 +162,11 @@ def format_percent(value: float) -> str:
 def final_decision(summary: Dict[str, Any], args: argparse.Namespace) -> str:
     valid_rate = metric(summary, "valid_rate")
     median_deg = metric(summary, "median_angular_error_deg_valid_only", default=9999.0)
-    acc30 = metric(summary, "angular_accuracy_at_30_deg_all_samples")
+    acc20 = metric(summary, "angular_accuracy_at_20_deg_all_samples")
     checks = [
         ("valid_rate", valid_rate >= args.min_valid_rate, format_percent(valid_rate), f">= {format_percent(args.min_valid_rate)}"),
         ("median_deg", median_deg <= args.max_median_deg, f"{median_deg:.2f}", f"<= {args.max_median_deg:.2f}"),
-        ("acc30_all", acc30 >= args.min_acc30_all, format_percent(acc30), f">= {format_percent(args.min_acc30_all)}"),
+        ("acc20_all", acc20 >= args.min_acc20_all, format_percent(acc20), f">= {format_percent(args.min_acc20_all)}"),
     ]
     failed = [f"{name} {observed} (target {target})" for name, ok, observed, target in checks if not ok]
     if not failed:
@@ -208,7 +208,7 @@ def append_progress(args: argparse.Namespace, state: Dict[str, Any]) -> bool:
         thresholds = {
             "min_valid_rate": args.min_valid_rate,
             "max_median_deg": args.max_median_deg,
-            "min_acc30_all": args.min_acc30_all,
+            "min_acc20_all": args.min_acc20_all,
         }
         final_text = (
             f"\n## Baseline Full-Run Result - {now_text()}\n"
@@ -221,6 +221,7 @@ def append_progress(args: argparse.Namespace, state: Dict[str, Any]) -> bool:
             f"- acc@5_all: {format_percent(metric(summary, 'angular_accuracy_at_5_deg_all_samples'))}\n"
             f"- acc@10_all: {format_percent(metric(summary, 'angular_accuracy_at_10_deg_all_samples'))}\n"
             f"- acc@15_all: {format_percent(metric(summary, 'angular_accuracy_at_15_deg_all_samples'))}\n"
+            f"- acc@20_all: {format_percent(metric(summary, 'angular_accuracy_at_20_deg_all_samples'))}\n"
             f"- acc@30_all: {format_percent(metric(summary, 'angular_accuracy_at_30_deg_all_samples'))}\n"
             f"- invalid_reason_counts: `{json.dumps(overall.get('invalid_reason_counts', {}), ensure_ascii=False)}`\n"
             f"- thresholds: `{json.dumps(thresholds, sort_keys=True)}`\n"

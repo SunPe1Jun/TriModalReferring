@@ -42,7 +42,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--pred_csv", required=True, help="Prediction CSV from run_qwen3vl_3d_directional.py.")
     parser.add_argument("--output_dir", required=True, help="Evaluation output directory.")
     parser.add_argument("--report_path", help="Optional markdown report path.")
-    parser.add_argument("--thresholds", default="5,10,15,30", help="Angular thresholds in degrees.")
+    parser.add_argument("--thresholds", default="5,10,15,20,30", help="Angular thresholds in degrees.")
     return parser.parse_args()
 
 
