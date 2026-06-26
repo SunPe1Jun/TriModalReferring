@@ -21,7 +21,7 @@ These thresholds are not paper claims. They are working criteria for deciding wh
 - model: `/workspace/usr3/Qwen3-VL-30B-A3B-Instruct`
 - launch mode: `setsid` background process so SSH disconnects do not terminate inference
 - status at log creation: running
-- progress at log creation: 3412 raw outputs out of 25887 manifest samples
+- progress at log creation: 3412 raw outputs. The original monitor denominator used manifest rows; this was later corrected to unique `(scene,row_index)` inference samples
 
 Observed issue before full-run completion:
 
@@ -35,6 +35,13 @@ Policy:
 - When V1 finishes, evaluate with `exam3/evaluate_3d_directional.py`.
 - If any acceptance criterion fails, inspect failure modes and run a new smoke test before launching any new full run.
 
+### Monitor Implementation Note - 2026-06-26
+
+- The first monitor version counted raw manifest CSV rows as the expected total.
+- This was incorrect because experiment 3 groups the manifest by `(scene,row_index)` before inference.
+- `exam3/monitor_3d_directional_run.py` was updated to count unique `(scene,row_index)` groups.
+- Existing model outputs were not changed.
+
 ### Monitor Update - 2026-06-26 21:29:52 HKT
 - output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v1_full`
 - raw outputs: 3494 / 25887 (13.50%)
@@ -46,3 +53,27 @@ Policy:
 - raw outputs: 3502 / 25887 (13.53%)
 - inference_process_running: True
 - latest run log line: `[ok] scene5 row_330 parse_ok=True`
+
+### Monitor Update - 2026-06-26 21:40:33 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v1_full`
+- raw outputs: 3628 / 25887 (14.01%)
+- inference_process_running: True
+- latest run log line: `[ok] scene5 row_456 parse_ok=True`
+
+### Monitor Update - 2026-06-26 21:50:33 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v1_full`
+- raw outputs: 3756 / 25887 (14.51%)
+- inference_process_running: True
+- latest run log line: `[ok] scene5 row_584 parse_ok=True`
+
+### Monitor Update - 2026-06-26 21:52:46 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v1_full`
+- raw outputs: 3784 / 4000 (94.60%)
+- inference_process_running: True
+- latest run log line: `[ok] scene5 row_612 parse_ok=True`
+
+### Monitor Update - 2026-06-26 21:57:01 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v1_full`
+- raw outputs: 3838 / 4000 (95.95%)
+- inference_process_running: True
+- latest run log line: `[ok] scene5 row_666 parse_ok=True`

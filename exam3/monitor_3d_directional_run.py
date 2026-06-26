@@ -9,6 +9,7 @@ finishes if needed, and appends progress/results to an iteration log.
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import subprocess
 import sys
@@ -59,12 +60,23 @@ def append_log(path: Path, text: str) -> None:
 
 
 def count_manifest_samples(path: Path) -> int:
+    """Count experiment-3 inference samples.
+
+    The exam2 manifest has one row per referent/panel combination, while
+    run_qwen3vl_3d_directional.py groups rows by (scene, row_index). Progress
+    should therefore use unique event groups, not raw CSV rows.
+    """
     try:
         with path.open("r", encoding="utf-8-sig") as handle:
-            line_count = sum(1 for _line in handle)
+            reader = csv.DictReader(handle)
+            keys = {
+                (str(row.get("scene", "")).strip(), str(row.get("row_index", "")).strip())
+                for row in reader
+                if str(row.get("scene", "")).strip() and str(row.get("row_index", "")).strip()
+            }
     except OSError:
         return 0
-    return max(0, line_count - 1)
+    return len(keys)
 
 
 def count_raw_outputs(output_root: Path) -> int:
