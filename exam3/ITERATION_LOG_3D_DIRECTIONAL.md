@@ -204,3 +204,357 @@ Decision: V3 passes the targeted schema smoke test (0 invalids), fixes the V2 ed
 - raw outputs: 26 / 4000 (0.65%)
 - inference_process_running: True
 - latest run log line: `[ok] scene1 row_25 parse_ok=True`
+
+### Monitor Update - 2026-06-27 00:40:19 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 101 / 4000 (2.53%)
+- inference_process_running: True
+- latest run log line: `[ok] scene1 row_100 parse_ok=True`
+
+### Monitor Update - 2026-06-27 00:45:20 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 177 / 4000 (4.42%)
+- inference_process_running: True
+- latest run log line: `[ok] scene1 row_176 parse_ok=True`
+
+### Monitor Update - 2026-06-27 00:50:20 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 252 / 4000 (6.30%)
+- inference_process_running: True
+- latest run log line: `[ok] scene1 row_251 parse_ok=True`
+
+### Monitor Update - 2026-06-27 00:55:21 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 328 / 4000 (8.20%)
+- inference_process_running: True
+- latest run log line: `[ok] scene1 row_327 parse_ok=True`
+
+### Monitor Update - 2026-06-27 01:00:21 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 403 / 4000 (10.08%)
+- inference_process_running: True
+- latest run log line: `[ok] scene1 row_402 parse_ok=True`
+
+### Monitor Update - 2026-06-27 01:05:21 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 478 / 4000 (11.95%)
+- inference_process_running: True
+- latest run log line: `[ok] scene1 row_477 parse_ok=True`
+
+### Monitor Update - 2026-06-27 01:10:22 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 552 / 4000 (13.80%)
+- inference_process_running: True
+- latest run log line: `[ok] scene1 row_551 parse_ok=True`
+
+### Monitor Update - 2026-06-27 01:15:22 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 627 / 4000 (15.68%)
+- inference_process_running: True
+- latest run log line: `[ok] scene1 row_626 parse_ok=True`
+
+### Monitor Update - 2026-06-27 01:20:23 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 702 / 4000 (17.55%)
+- inference_process_running: True
+- latest run log line: `[ok] scene1 row_701 parse_ok=True`
+
+### Monitor Update - 2026-06-27 01:25:23 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 777 / 4000 (19.43%)
+- inference_process_running: True
+- latest run log line: `[ok] scene1 row_776 parse_ok=True`
+
+### Monitor Update - 2026-06-27 01:30:23 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 853 / 4000 (21.32%)
+- inference_process_running: True
+- latest run log line: `[ok] scene2 row_52 parse_ok=True`
+
+### Monitor Update - 2026-06-27 01:35:24 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 928 / 4000 (23.20%)
+- inference_process_running: True
+- latest run log line: `[ok] scene2 row_127 parse_ok=True`
+
+### Monitor Update - 2026-06-27 01:40:24 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 1004 / 4000 (25.10%)
+- inference_process_running: True
+- latest run log line: `[ok] scene2 row_203 parse_ok=True`
+
+### Monitor Update - 2026-06-27 01:45:25 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 1080 / 4000 (27.00%)
+- inference_process_running: True
+- latest run log line: `[ok] scene2 row_281 parse_ok=True`
+
+### Monitor Update - 2026-06-27 01:50:25 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 1156 / 4000 (28.90%)
+- inference_process_running: True
+- latest run log line: `[ok] scene2 row_358 parse_ok=True`
+
+### Monitor Update - 2026-06-27 01:55:25 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 1232 / 4000 (30.80%)
+- inference_process_running: True
+- latest run log line: `[ok] scene2 row_436 parse_ok=True`
+
+### Monitor Update - 2026-06-27 02:00:26 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 1308 / 4000 (32.70%)
+- inference_process_running: True
+- latest run log line: `[ok] scene2 row_513 parse_ok=True`
+
+### Monitor Update - 2026-06-27 02:05:26 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 1384 / 4000 (34.60%)
+- inference_process_running: True
+- latest run log line: `[ok] scene2 row_590 parse_ok=True`
+
+### Monitor Update - 2026-06-27 02:10:26 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 1460 / 4000 (36.50%)
+- inference_process_running: True
+- latest run log line: `[ok] scene2 row_666 parse_ok=True`
+
+### Monitor Update - 2026-06-27 02:15:27 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 1535 / 4000 (38.38%)
+- inference_process_running: True
+- latest run log line: `[ok] scene2 row_741 parse_ok=True`
+
+### Monitor Update - 2026-06-27 02:20:27 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 1610 / 4000 (40.25%)
+- inference_process_running: True
+- latest run log line: `[ok] scene3 row_18 parse_ok=True`
+
+### Monitor Update - 2026-06-27 02:25:28 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 1688 / 4000 (42.20%)
+- inference_process_running: True
+- latest run log line: `[ok] scene3 row_96 parse_ok=True`
+
+### Monitor Update - 2026-06-27 02:30:28 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 1765 / 4000 (44.12%)
+- inference_process_running: True
+- latest run log line: `[ok] scene3 row_173 parse_ok=True`
+
+### Monitor Update - 2026-06-27 02:35:28 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 1842 / 4000 (46.05%)
+- inference_process_running: True
+- latest run log line: `[ok] scene3 row_250 parse_ok=True`
+
+### Monitor Update - 2026-06-27 02:40:29 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 1919 / 4000 (47.98%)
+- inference_process_running: True
+- latest run log line: `[ok] scene3 row_327 parse_ok=True`
+
+### Monitor Update - 2026-06-27 02:45:29 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 1997 / 4000 (49.93%)
+- inference_process_running: True
+- latest run log line: `[ok] scene3 row_405 parse_ok=False`
+
+### Monitor Update - 2026-06-27 02:50:29 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 2074 / 4000 (51.85%)
+- inference_process_running: True
+- latest run log line: `[ok] scene3 row_482 parse_ok=True`
+
+### Monitor Update - 2026-06-27 02:55:30 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 2152 / 4000 (53.80%)
+- inference_process_running: True
+- latest run log line: `[ok] scene3 row_560 parse_ok=True`
+
+### Monitor Update - 2026-06-27 03:00:30 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 2228 / 4000 (55.70%)
+- inference_process_running: True
+- latest run log line: `[ok] scene3 row_636 parse_ok=True`
+
+### Monitor Update - 2026-06-27 03:05:31 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 2305 / 4000 (57.63%)
+- inference_process_running: True
+- latest run log line: `[ok] scene3 row_713 parse_ok=True`
+
+### Monitor Update - 2026-06-27 03:10:31 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 2382 / 4000 (59.55%)
+- inference_process_running: True
+- latest run log line: `[ok] scene3 row_790 parse_ok=True`
+
+### Monitor Update - 2026-06-27 03:15:31 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 2458 / 4000 (61.45%)
+- inference_process_running: True
+- latest run log line: `[ok] scene4_room1 row_75 parse_ok=True`
+
+### Monitor Update - 2026-06-27 03:20:32 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 2534 / 4000 (63.35%)
+- inference_process_running: True
+- latest run log line: `[ok] scene4_room1 row_156 parse_ok=True`
+
+### Monitor Update - 2026-06-27 03:25:32 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 2608 / 4000 (65.20%)
+- inference_process_running: True
+- latest run log line: `[ok] scene4_room2 row_30 parse_ok=True`
+
+### Monitor Update - 2026-06-27 03:30:33 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 2684 / 4000 (67.10%)
+- inference_process_running: True
+- latest run log line: `[ok] scene4_room2 row_106 parse_ok=True`
+
+### Monitor Update - 2026-06-27 03:35:33 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 2759 / 4000 (68.97%)
+- inference_process_running: True
+- latest run log line: `[ok] scene4_room2 row_181 parse_ok=True`
+
+### Monitor Update - 2026-06-27 03:40:33 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 2835 / 4000 (70.88%)
+- inference_process_running: True
+- latest run log line: `[ok] scene4_room3 row_58 parse_ok=True`
+
+### Monitor Update - 2026-06-27 03:45:34 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 2911 / 4000 (72.78%)
+- inference_process_running: True
+- latest run log line: `[ok] scene4_room3 row_134 parse_ok=False`
+
+### Monitor Update - 2026-06-27 03:50:34 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 2987 / 4000 (74.67%)
+- inference_process_running: True
+- latest run log line: `[ok] scene4_room4 row_10 parse_ok=True`
+
+### Monitor Update - 2026-06-27 03:55:34 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 3066 / 4000 (76.65%)
+- inference_process_running: True
+- latest run log line: `[ok] scene4_room4 row_90 parse_ok=True`
+
+### Monitor Update - 2026-06-27 04:00:35 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 3144 / 4000 (78.60%)
+- inference_process_running: True
+- latest run log line: `[ok] scene4_room4 row_168 parse_ok=True`
+
+### Monitor Update - 2026-06-27 04:05:35 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 3221 / 4000 (80.53%)
+- inference_process_running: True
+- latest run log line: `[ok] scene5 row_47 parse_ok=True`
+
+### Monitor Update - 2026-06-27 04:10:36 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 3296 / 4000 (82.40%)
+- inference_process_running: True
+- latest run log line: `[ok] scene5 row_123 parse_ok=True`
+
+### Monitor Update - 2026-06-27 04:15:36 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 3371 / 4000 (84.28%)
+- inference_process_running: True
+- latest run log line: `[ok] scene5 row_199 parse_ok=True`
+
+### Monitor Update - 2026-06-27 04:20:36 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 3448 / 4000 (86.20%)
+- inference_process_running: True
+- latest run log line: `[ok] scene5 row_276 parse_ok=True`
+
+### Monitor Update - 2026-06-27 04:25:37 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 3523 / 4000 (88.08%)
+- inference_process_running: True
+- latest run log line: `[ok] scene5 row_351 parse_ok=True`
+
+### Monitor Update - 2026-06-27 04:30:37 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 3600 / 4000 (90.00%)
+- inference_process_running: True
+- latest run log line: `[ok] scene5 row_428 parse_ok=True`
+
+### Monitor Update - 2026-06-27 04:35:37 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 3677 / 4000 (91.92%)
+- inference_process_running: True
+- latest run log line: `[ok] scene5 row_505 parse_ok=True`
+
+### Monitor Update - 2026-06-27 04:40:38 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 3753 / 4000 (93.83%)
+- inference_process_running: True
+- latest run log line: `[ok] scene5 row_581 parse_ok=True`
+
+### Monitor Update - 2026-06-27 04:45:38 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 3829 / 4000 (95.73%)
+- inference_process_running: True
+- latest run log line: `[ok] scene5 row_657 parse_ok=True`
+
+### Monitor Update - 2026-06-27 04:50:39 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 3905 / 4000 (97.62%)
+- inference_process_running: True
+- latest run log line: `[ok] scene5 row_733 parse_ok=True`
+
+### Monitor Update - 2026-06-27 04:55:39 HKT
+- output_root: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable`
+- raw outputs: 3971 / 4000 (99.28%)
+- inference_process_running: False
+- latest run log line: `Wrote report: /workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable/report.md`
+
+## Baseline Full-Run Result - 2026-06-27 04:55:39 HKT
+- total_samples: 3971
+- valid_prediction_count: 3861
+- invalid_count: 110
+- valid_rate: 97.23%
+- mean_angular_error_deg_valid_only: 14.53
+- median_angular_error_deg_valid_only: 8.97
+- acc@5_all: 43.24%
+- acc@10_all: 49.86%
+- acc@15_all: 58.78%
+- acc@20_all: 68.55%
+- acc@30_all: 79.65%
+- invalid_reason_counts: `{"point_3d_wrong_dimension": 110}`
+- thresholds: `{"max_median_deg": 15.0, "min_acc20_all": 0.6, "min_valid_rate": 0.98}`
+- decision: NEEDS ITERATION: valid_rate 97.23% (target >= 98.00%)
+- summary_json: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable/eval/3d_directional_eval_summary.json`
+- report_md: `/workspace/usr3/TriModal-Referring/exam3/outputs_qwen3vl30b_3d_directional_v3_full_evaluable/report.md`
+
+## Final V3 Adoption Decision - 2026-06-27
+
+User decision: do not run V4. Generate the V3 report/statistics documents and stop iteration after the full V3 result is documented.
+
+Rationale:
+
+- V3 full run completed on the 3971-sample evaluable subset.
+- The primary paper-facing angular range is 5-20 deg, with @30 retained only as a loose reference.
+- V3 directional metrics are acceptable for the camera-centered 3D directional diagnostic:
+  - median angular error valid-only: 8.97 deg
+  - acc@15 all: 58.78%
+  - acc@20 all: 68.55%
+  - acc@30 all, loose reference only: 79.65%
+- V3 does not meet the earlier 98% engineering valid-rate gate:
+  - valid_rate: 97.23%
+  - invalid_count: 110
+  - invalid_reason_counts: `{"point_3d_wrong_dimension": 110}`
+- The remaining schema failures are reported as a limitation instead of being manually repaired or triggering another full run.
+
+Final documentation:
+
+- report: `exam3/RESULTS_QWEN3VL30B_3D_DIRECTIONAL_V3.md`
+- statistics: `exam3/STATS_QWEN3VL30B_3D_DIRECTIONAL_V3.md`
