@@ -40,3 +40,10 @@ exam3/*.log
 
 # Internal handoff notes
 THREAD_HANDOFF_CODE.md
+
+# Ablation generated outputs
+ablation/logs/
+ablation/exam1/outputs*/
+ablation/exam2/outputs*/
+ablation/exam1/**/__pycache__/
+ablation/exam2/**/__pycache__/
