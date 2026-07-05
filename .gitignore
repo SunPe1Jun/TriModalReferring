@@ -47,3 +47,6 @@ ablation/exam1/outputs*/
 ablation/exam2/outputs*/
 ablation/exam1/**/__pycache__/
 ablation/exam2/**/__pycache__/
+# InternVL generated outputs
+internvl/logs/
+internvl/outputs*/
