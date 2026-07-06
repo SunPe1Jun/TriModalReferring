@@ -5,8 +5,9 @@ Baseline is reused from `data/match_eval_qwen3vl30b_mention_first_v3/`. Candidat
 | Variant | Predictions | Overall Acc | Delta Acc | Mapped Acc | Exact Set Acc | Micro F1 | Delta F1 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | full_baseline | 4000 | 0.7660 |  | 0.7714 | 0.3205 | 0.5326 |  |
-| no_gaze | 2 | 0.5000 | -0.2660 | 0.5000 | 0.5000 | 0.5000 | -0.0326 |
-| no_hand | 2 | 0.5000 | -0.2660 | 0.5000 | 0.5000 | 0.6667 | 0.1341 |
+| language_anchors_only | 4000 | 0.6280 | -0.1380 | 0.6324 | 0.2553 | 0.4896 | -0.0430 |
+| no_gaze | 4000 | 0.7170 | -0.0490 | 0.7221 | 0.2840 | 0.4890 | -0.0436 |
+| no_hand | 4000 | 0.7665 | 0.0005 | 0.7719 | 0.3180 | 0.5326 | 0.0000 |
 | no_visual | 4000 | 0.7302 | -0.0358 | 0.7354 | 0.3147 | 0.5425 | 0.0099 |
 
 ## Notes

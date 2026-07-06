@@ -1,0 +1,6 @@
+variant,events,gt_referents,time_evaluable_referents,predictions,time_f1,point_50_f1,point_100_f1,point_150_f1,joint_50_f1,joint_100_f1,joint_150_f1,mean_point_distance_px_100,mean_joint_distance_px_100,delta_joint_100_f1_vs_baseline,delta_point_100_f1_vs_baseline,source
+full_baseline,4000,8330,8330,8635,0.7333,0.0960,0.2470,0.3553,0.0800,0.2038,0.2932,57.9929,57.7760,,,/workspace/usr3/TriModal-Referring/exam2/outputs_qwen3vl30b_2d_point_hybrid_v10/eval/2d_eval_summary.json
+full_panels_no_crop,4000,8330,8330,8637,0.7010,0.0878,0.2236,0.3190,0.0684,0.1759,0.2503,58.7615,58.7954,-0.0280,-0.0234,/workspace/usr3/TriModal-Referring/ablation/exam2/outputs/full_panels_no_crop/eval/2d_eval_summary.json
+instruction_only_prompt,4000,8330,8330,7582,0.6549,0.0894,0.2262,0.3161,0.0724,0.1799,0.2544,57.5738,56.9182,-0.0240,-0.0207,/workspace/usr3/TriModal-Referring/ablation/exam2/outputs/instruction_only_prompt/eval/2d_eval_summary.json
+no_gaze,4000,8330,8330,8632,0.6886,0.0777,0.2027,0.2989,0.0610,0.1551,0.2298,59.0221,58.3642,-0.0488,-0.0443,/workspace/usr3/TriModal-Referring/ablation/exam2/outputs/no_gaze/eval/2d_eval_summary.json
+no_gaze_text_prior,4000,8330,8330,8617,0.6896,0.0878,0.2199,0.3144,0.0689,0.1725,0.2465,58.2964,58.1208,-0.0313,-0.0271,/workspace/usr3/TriModal-Referring/ablation/exam2/outputs/no_gaze_text_prior/eval/2d_eval_summary.json
