@@ -22,6 +22,8 @@ exam2/selected_panel_export_manifest.csv*
 exam2/*.log
 exam3/outputs*/
 exam3/*.log
+exam3_point_grounding/outputs*/
+exam3_point_grounding/*.log
 *.jpg
 *.jpeg
 *.png
