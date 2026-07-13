@@ -1,0 +1,24 @@
+# Anchor selection baseline and ablations
+data/match_eval_qwen3vl30b_mention_first_v3/ (*_match_eval.csv, *_match_eval_summary.json)
+data/*_local_3d_outputs_qwen3vl30b_mention_first_v3/ (sample-level prediction JSON)
+ablation/exam1/outputs/{language_anchors_only,no_gaze,no_hand,no_visual,no_gaze_hand}/
+ablation/exam1/run_exam1_ablation.sh
+ablation/exam1/scripts/grounding/
+ablation/exam1/scripts/eval/
+
+# Projected-2D baseline and ablations
+exam2/outputs_qwen3vl30b_2d_point_hybrid_v10/{manifest,predictions,eval}/
+ablation/exam2/outputs/{full_panels_no_crop,instruction_only_prompt,no_gaze,no_gaze_text_prior}/
+ablation/exam2/run_exam2_ablation.sh
+ablation/exam2/scripts/run_qwen3vl_2d_point_grounding.py
+exam2/evaluate_2d_point_grounding.py
+
+# 3D grounding search result
+exam3_point_grounding/outputs_full_v9_20260709/qwen3vl30b/ (completed full VLM run)
+exam3_point_grounding/outputs_full_v9_20260709/cue_baselines/{gaze_copy,hand_copy,gaze_hand_fusion}/
+No completed VLM no_language/no_gaze/no_hand/no_visual directory was found under exam3_point_grounding, exam3, qwen8, or internvl.
+
+# Prior reports inspected
+ablation/reports/MODALITY_ABLATION_AUDIT.md
+ablation/reports/ABLATION_RESULTS.md
+ablation/reports/ABLATION_SUMMARY_CN.md
