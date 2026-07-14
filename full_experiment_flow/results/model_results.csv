@@ -1,0 +1,10 @@
+experiment,model,num_samples,valid_output_count,metric_1_name,metric_1_value,metric_2_name,metric_2_value,metric_3_name,metric_3_value,source
+experiment1,Qwen3-VL-30B-A3B,4000,3970,hit_all,0.7660000000,exact,0.3204934542,micro_f1,0.5325880114,analysis_outputs/ablation_audit/anchor_ablation_summary.csv
+experiment1,Qwen3-VL-8B,4000,3872,hit_all,0.6625000000,exact,0.2328801611,micro_f1,0.4622871046,qwen8/outputs/exam1_qwen3vl8b_baseline/eval/*_summary.json
+experiment1,InternVL3-38B,4000,3982,hit_all,0.7092500000,exact,0.2532729104,micro_f1,0.4826684921,internvl/outputs/exam1_internvl3_38b_baseline/eval/*_summary.json
+experiment2,Qwen3-VL-30B-A3B,4000,3964,temporal_f1,0.7332743884,point100_f1,0.2469790746,joint100_f1,0.2038314176,analysis_outputs/ablation_audit/projected2d_ablation_summary.csv
+experiment2,Qwen3-VL-8B,4000,3971,temporal_f1,0.7455607198,point100_f1,0.2340603027,joint100_f1,0.2002145156,qwen8/outputs/exam2_qwen3vl8b_baseline_2d_point_hybrid_v10/eval/2d_eval_summary.json
+experiment2,InternVL3-38B,4000,3971,temporal_f1,0.7320407802,point100_f1,0.1231657729,joint100_f1,0.0981790324,internvl/outputs/exam2_internvl3_38b_baseline/eval/2d_eval_summary.json
+experiment3,Qwen3-VL-30B-A3B,3971,3971,anchor_set_f1,0.4257000000,margin_f1_at_1,0.2492000000,margin_f1_at_2,0.4107000000,exam3_point_grounding/reports/experiment3_full_results_v9_summary.json
+experiment3,Qwen3-VL-8B,3971,3971,anchor_set_f1,0.4147188151,margin_f1_at_1,0.2435369843,margin_f1_at_2,0.4008652527,qwen8/outputs/exam3_qwen3vl8b_point_grounding_merged_20260713/eval/evaluation_summary.json
+experiment3,InternVL3-38B,3971,3971,anchor_set_f1,0.3863252145,margin_f1_at_1,0.2301548887,margin_f1_at_2,0.3909728945,internvl/outputs/exam3_internvl38b_point_grounding_merged_20260714/eval/evaluation_summary.json

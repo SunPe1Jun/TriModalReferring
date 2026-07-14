@@ -1,0 +1,12 @@
+experiment,variant,category,metric_1_name,metric_1_value,metric_2_name,metric_2_value,delta_primary_vs_full,strict_modality_ablation
+experiment1,full_baseline,baseline,hit_all,0.7660000000,micro_f1,0.5325880114,0.0000000000,false
+experiment1,language_anchors_only,multimodal_input_baseline,hit_all,0.6280000000,micro_f1,0.4896293323,-0.1380000000,false
+experiment1,no_gaze,hybrid,hit_all,0.7170000000,micro_f1,0.4889867841,-0.0490000000,false
+experiment1,no_hand,hybrid,hit_all,0.7665000000,micro_f1,0.5326282899,0.0005000000,false
+experiment1,no_visual,hybrid,hit_all,0.7302500000,micro_f1,0.5424643454,-0.0357500000,false
+experiment1,no_gaze_hand,hybrid,hit_all,0.7140000000,micro_f1,0.4877232810,-0.0520000000,false
+experiment2,full_baseline,baseline,temporal_f1,0.7332743884,joint100_f1,0.2038314176,0.0000000000,false
+experiment2,full_panels_no_crop,preprocessing,temporal_f1,0.7010078387,joint100_f1,0.1758708080,-0.0279606096,false
+experiment2,instruction_only_prompt,prompt,temporal_f1,0.6548516843,joint100_f1,0.1798642534,-0.0239671642,false
+experiment2,no_gaze,hybrid,temporal_f1,0.6885980427,joint100_f1,0.1550524702,-0.0487789474,false
+experiment2,no_gaze_text_prior,hybrid,temporal_f1,0.6895615743,joint100_f1,0.1725379123,-0.0312935053,false
