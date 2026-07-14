@@ -2,6 +2,10 @@
 
 This directory is the compact entry point for the completed experiments. It records the purpose, protocol, measured results, reproduction entry points, and interpretation boundary of each experiment without duplicating large raw predictions.
 
+## Evidence Bundle
+
+The auditable paper bundle is `paper_experiment_evidence/`. It contains nine unified sample-level exports, explicit denominator audits, evaluator copies, manifests, run provenance, and machine-readable validation. The bundle is generated from the final run directories without rerunning inference. Values in the tables below are table-ready legacy-compatible summaries; the evidence bundle also records invalid, missing, and parse-failure rows separately.
+
 ## Experiment Map
 
 | Experiment | Purpose | Model output | Main evaluation | Completed scale |
@@ -46,5 +50,6 @@ Exact source paths and additional metrics are recorded in `results/model_results
 - Experiment 1 is closed-set anchor selection; candidate anchors are model inputs.
 - Experiment 2 is a projected-2D diagnostic, not native 3D localization.
 - Experiment 3 hides anchor candidates from the model, but its v9 prompt exposes measured gaze/hand endpoints. It is therefore a measured point-hypothesis diagnostic, not unconstrained 3D reconstruction or 3D box grounding.
-- The completed ablations do not meet the strict single-modality definition in the audit specification. They are useful hybrid/input/preprocessing/prompt ablations, and no strict paired-bootstrap significance claim is available.
+- The completed ablations do not meet the strict single-modality definition in the audit specification. They are descriptive hybrid/input/preprocessing/prompt ablations, and no strict paired-bootstrap significance claim is available.
+- Experiment 3 is a candidate-free measured point-hypothesis diagnostic. It is not unconstrained 3D reconstruction, 3D box grounding, or 3D IoU evaluation. The gaze-copy baseline is reported with the model results.
 - All values in this directory come from existing evaluator outputs. No model output was edited and no experiment was rerun to create this summary.

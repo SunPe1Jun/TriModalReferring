@@ -1,0 +1,10 @@
+scene_key,source_json,total_gt_rows,total_prediction_files,response_status_ok_count,storyboard_fallback_count,match_count_overall,overall_accuracy,evaluable_row_count,evaluable_coverage,unevaluable_row_count,match_count_evaluable_only,mapped_only_accuracy,unsupported_gt_row_count,unsupported_gt_referent_mention_count,unsupported_gt_distinct_label_count,predicted_label_count,matched_label_count
+scene1,/ai/data/TriModal-Referring/data/match_eval_qwen3vl8b/scene1_match_eval_summary.json,800,800,800,800,445,0.55625,800,1.0,0,445,0.55625,0,0,0,21,20
+scene2,/ai/data/TriModal-Referring/data/match_eval_qwen3vl8b/scene2_match_eval_summary.json,800,800,800,800,269,0.33625,792,0.99,8,269,0.33964646464646464,96,100,3,35,29
+scene3,/ai/data/TriModal-Referring/data/match_eval_qwen3vl8b/scene3_match_eval_summary.json,800,800,800,800,562,0.7025,800,1.0,0,562,0.7025,1,1,1,20,18
+scene4_room1,/ai/data/TriModal-Referring/data/match_eval_qwen3vl8b/scene4_room1_match_eval_summary.json,200,200,200,200,165,0.825,186,0.93,14,165,0.8870967741935484,90,108,23,17,17
+scene4_room2,/ai/data/TriModal-Referring/data/match_eval_qwen3vl8b/scene4_room2_match_eval_summary.json,200,200,200,200,191,0.955,200,1.0,0,191,0.955,6,6,1,16,16
+scene4_room3,/ai/data/TriModal-Referring/data/match_eval_qwen3vl8b/scene4_room3_match_eval_summary.json,200,200,200,200,195,0.975,199,0.995,1,195,0.9798994974874372,3,3,2,17,16
+scene4_room4,/ai/data/TriModal-Referring/data/match_eval_qwen3vl8b/scene4_room4_match_eval_summary.json,200,200,200,200,187,0.935,199,0.995,1,187,0.9396984924623115,1,1,1,19,19
+scene5,/ai/data/TriModal-Referring/data/match_eval_qwen3vl8b/scene5_match_eval_summary.json,800,800,800,800,389,0.48625,796,0.995,4,389,0.4886934673366834,128,158,35,26,24
+ALL,,4000,4000,4000,4000,2403,0.60075,3972,0.993,28,2403,0.6049848942598187,325,377,66,0,0

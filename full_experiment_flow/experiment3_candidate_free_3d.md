@@ -2,13 +2,13 @@
 
 ## Purpose
 
-Test whether language, target-free evidence frames, and measured VR telemetry can produce useful 3D referent point hypotheses when candidate anchor ids and coordinates are hidden from the model.
+Test whether language, target-free evidence frames, and measured VR telemetry can produce useful 3D referent point hypotheses when candidate anchor ids and coordinates are hidden from the model. The exact task name is **candidate-free measured point-hypothesis diagnostic**.
 
 ## Protocol
 
 Up to three chronological evidence frames are selected inside each event without using the target anchor. The model receives language, images, camera pose, gaze and hand telemetry, robust scene bounds, and copyable measured gaze/hand ray endpoints. It emits a variable-size JSON list of Unity world-coordinate points.
 
-The evaluator loads hidden scene anchors only after inference. Each point is mapped to its nearest anchor for set evaluation and matched against GT points for margin-normalized and scene-normalized errors. Invalid outputs become empty sets and remain in the denominator.
+The evaluator loads hidden scene anchors only after inference. Each point is mapped to its nearest anchor for set evaluation and matched against GT points for margin-normalized and scene-normalized errors. Invalid outputs become empty sets and remain in the denominator. This is not unconstrained 3D reconstruction, 3D box grounding, or 3D IoU evaluation.
 
 The manifest has 3,971 evaluable interactions: scene1 800, scene2 791, scene3 800, scene4 rooms 784, and scene5 796.
 
@@ -48,3 +48,5 @@ The deterministic gaze-copy baseline reaches anchor F1 0.4257 and Margin-F1@2.0 
 The v9 protocol is candidate-free relative to scene anchors, but it deliberately exposes measured gaze/hand endpoints and asks the model to select or copy them. The defensible claim is that measured behavioral point hypotheses provide target-free 3D grounding signal. Do not claim unconstrained 3D reconstruction, object extents, boxes, or 3D IoU.
 
 The older camera-centered angular diagnostic under `exam3/` is archived and is not the final Experiment 3 result.
+
+The deterministic gaze-copy baseline is reported because the v9 prompt exposes measured gaze hypotheses that the model can copy. In the final run it ties Qwen3-VL-30B on anchor-set F1 while slightly exceeding it on Margin-F1. See `paper_experiment_evidence/EXPERIMENT3_FULL_RESULTS_V9.md`.
