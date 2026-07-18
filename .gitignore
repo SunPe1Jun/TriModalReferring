@@ -47,8 +47,11 @@ THREAD_HANDOFF_CODE.md
 ablation/logs/
 ablation/exam1/outputs*/
 ablation/exam2/outputs*/
+ablation/exam3/outputs*/
+ablation/exam3/logs/
 ablation/exam1/**/__pycache__/
 ablation/exam2/**/__pycache__/
+ablation/exam3/**/__pycache__/
 # InternVL generated outputs
 internvl/logs/
 internvl/outputs*/

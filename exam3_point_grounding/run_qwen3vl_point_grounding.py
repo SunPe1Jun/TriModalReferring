@@ -17,6 +17,7 @@ if __package__ in (None, ""):
 
 from point_grounding_common import load_qwen_module, normalize_text, parse_int, read_csv_rows, write_csv, write_json  # noqa: E402
 from point_parser import parse_points_3d_output  # noqa: E402
+from ablation_inputs import ABLATION_VARIANTS, audit_prompt, frame_paths as ablation_frame_paths, render_prompt  # noqa: E402
 
 
 OUTPUT_COLUMNS = (
@@ -32,6 +33,7 @@ OUTPUT_COLUMNS = (
     "pred_point_count",
     "pred_points_json",
     "error_message",
+    "ablation_variant",
 )
 
 
@@ -55,6 +57,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--overwrite", action="store_true")
     parser.add_argument("--continue_on_error", action="store_true")
     parser.add_argument("--flush_every", type=int, default=25, help="Write the prediction CSV every N processed samples; <=0 only writes at the end.")
+    parser.add_argument("--ablation_variant", choices=("full",) + ABLATION_VARIANTS, default="full")
+    parser.add_argument("--prompt_template", default="exam3_point_grounding/prompts/qwen3vl_point_grounding.md")
     return parser.parse_args()
 
 
@@ -116,20 +120,29 @@ def build_model_inputs(processor: Any, images: Sequence[Image.Image], prompt_tex
     ]
     if hasattr(processor, "apply_chat_template"):
         chat_text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-        return processor(text=[chat_text], images=list(images), return_tensors="pt")
-    return processor(text=[system_prompt + "\n\n" + prompt_text], images=list(images), return_tensors="pt")
+        if images:
+            return processor(text=[chat_text], images=list(images), return_tensors="pt")
+        return processor(text=[chat_text], return_tensors="pt")
+    if images:
+        return processor(text=[system_prompt + "\n\n" + prompt_text], images=list(images), return_tensors="pt")
+    return processor(text=[system_prompt + "\n\n" + prompt_text], return_tensors="pt")
 
 
-def run_one(runner: Any, qwen_module: Any, row: Mapping[str, str], max_new_tokens: int) -> Tuple[str, bool, Dict[str, Any], str]:
-    frame_paths = frame_paths_from_row(row)
-    if not frame_paths:
-        raise RuntimeError("No frame paths in manifest row.")
+def run_one(
+    runner: Any,
+    qwen_module: Any,
+    row: Mapping[str, str],
+    max_new_tokens: int,
+    prompt_text: str,
+    selected_frame_paths: Sequence[Path],
+) -> Tuple[str, bool, Dict[str, Any], str]:
+    frame_paths = list(selected_frame_paths)
     images = []
     for path in frame_paths:
         if not path.exists():
             raise FileNotFoundError(f"Missing evidence image: {path}")
         images.append(Image.open(path).convert("RGB"))
-    model_inputs = build_model_inputs(runner.processor, images, normalize_text(row.get("prompt_text")))
+    model_inputs = build_model_inputs(runner.processor, images, prompt_text)
     model_inputs = qwen_module.move_batch_to_device(model_inputs, runner.device)
     with runner.runtime.torch.inference_mode():
         generated = runner.model.generate(
@@ -144,7 +157,7 @@ def run_one(runner: Any, qwen_module: Any, row: Mapping[str, str], max_new_token
     return raw_output, parse_ok, parsed, invalid_reason
 
 
-def output_row_from_payload(row: Mapping[str, str], raw_path: Path, payload: Mapping[str, Any]) -> Dict[str, Any]:
+def output_row_from_payload(row: Mapping[str, str], raw_path: Path, payload: Mapping[str, Any], variant: str) -> Dict[str, Any]:
     parsed = payload.get("parsed_json") if isinstance(payload.get("parsed_json"), Mapping) else {"points_3d": []}
     points = parsed.get("points_3d") if isinstance(parsed, Mapping) else []
     if not isinstance(points, list):
@@ -162,6 +175,7 @@ def output_row_from_payload(row: Mapping[str, str], raw_path: Path, payload: Map
         "pred_point_count": len(points),
         "pred_points_json": json.dumps(points, ensure_ascii=False),
         "error_message": normalize_text(payload.get("error_message")),
+        "ablation_variant": variant,
     }
 
 
@@ -169,6 +183,7 @@ def main() -> None:
     args = parse_args()
     repo_root = Path(args.repo_root).resolve()
     manifest_rows = read_csv_rows((repo_root / args.manifest).resolve())
+    prompt_template = (repo_root / args.prompt_template).read_text(encoding="utf-8")
     exact_keys = parse_sample_keys(args.sample_keys, args.sample_keys_file)
     rows = [row for row in manifest_rows if selected(row, args, exact_keys)]
     if not rows:
@@ -197,17 +212,24 @@ def main() -> None:
         scene = normalize_text(row.get("scene"))
         row_index = normalize_text(row.get("row_index"))
         raw_path = output_json_dir / f"{scene}_row_{row_index}.json"
+        variant = args.ablation_variant
+        prompt_text = normalize_text(row.get("prompt_text")) if variant == "full" else render_prompt(prompt_template, row, variant)
+        selected_frame_paths = frame_paths_from_row(row) if variant == "full" else ablation_frame_paths(row, variant)
         try:
             if raw_path.exists() and not args.overwrite:
                 payload = json.loads(raw_path.read_text(encoding="utf-8"))
             else:
-                raw_output, parse_ok, parsed, invalid_reason = run_one(runner, qwen_module, row, args.max_new_tokens)
+                raw_output, parse_ok, parsed, invalid_reason = run_one(
+                    runner, qwen_module, row, args.max_new_tokens, prompt_text, selected_frame_paths
+                )
                 payload = {
                     "scene": scene,
                     "row_index": row_index,
                     "event_id": normalize_text(row.get("event_id")),
-                    "prompt_text": normalize_text(row.get("prompt_text")),
-                    "frame_paths": [str(path) for path in frame_paths_from_row(row)],
+                    "prompt_text": prompt_text,
+                    "frame_paths": [str(path) for path in selected_frame_paths],
+                    "ablation_variant": variant,
+                    "prompt_audit": audit_prompt(prompt_text, variant),
                     "model_raw_output": raw_output,
                     "parsed_json": parsed,
                     "parse_ok": parse_ok,
@@ -215,15 +237,17 @@ def main() -> None:
                     "error_message": "",
                 }
                 write_json(raw_path, payload)
-            output_rows.append(output_row_from_payload(row, raw_path, payload))
+            output_rows.append(output_row_from_payload(row, raw_path, payload, variant))
             print(f"[ok] {scene}:{row_index} parse_ok={payload.get('parse_ok')} points={len(payload.get('parsed_json', {}).get('points_3d', [])) if isinstance(payload.get('parsed_json'), Mapping) else 0}", flush=True)
         except Exception as exc:
             payload = {
                 "scene": scene,
                 "row_index": row_index,
                 "event_id": normalize_text(row.get("event_id")),
-                "prompt_text": normalize_text(row.get("prompt_text")),
-                "frame_paths": [str(path) for path in frame_paths_from_row(row)],
+                "prompt_text": prompt_text,
+                "frame_paths": [str(path) for path in selected_frame_paths],
+                "ablation_variant": variant,
+                "prompt_audit": audit_prompt(prompt_text, variant),
                 "model_raw_output": "",
                 "parsed_json": {"points_3d": []},
                 "parse_ok": False,
@@ -231,7 +255,7 @@ def main() -> None:
                 "error_message": f"{type(exc).__name__}: {exc}",
             }
             write_json(raw_path, payload)
-            output_rows.append(output_row_from_payload(row, raw_path, payload))
+            output_rows.append(output_row_from_payload(row, raw_path, payload, variant))
             print(f"[error] {scene}:{row_index} {type(exc).__name__}: {exc}", flush=True)
             if not args.continue_on_error:
                 raise
