@@ -1,0 +1,6 @@
+unified_id,scene,row_index,change,mapped_referents,matched_location_region_anchors
+scene4_room3::19,scene4_room3,19,added,room1,room1
+scene5::131,scene5,131,added,"drone5,coastal_road",coastal_road
+scene5::35,scene5,35,added,"drone5,coastal_road",coastal_road
+scene5::58,scene5,58,added,"drone4,coastal_road",coastal_road
+scene5::9,scene5,9,added,"drone5,seawall",seawall

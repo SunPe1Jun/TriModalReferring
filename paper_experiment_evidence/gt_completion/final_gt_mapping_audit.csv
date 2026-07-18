@@ -1,0 +1,30 @@
+unified_id,scene,row_index,raw_referents,expected_canonical,actual_canonical,unmapped_referents,status
+scene2::260,scene2,260,Laptop1,laptop1,laptop1,,ok
+scene2::265,scene2,265,Printer,printer,printer,,ok
+scene2::335,scene2,335,Printer,printer,printer,,ok
+scene2::361,scene2,361,"Laptop1, Printer","laptop1, printer","laptop1, printer",,ok
+scene2::374,scene2,374,Laptop1,laptop1,laptop1,,ok
+scene2::498,scene2,498,"desk4, file4, desk1","desk4, file4, desk1","desk4, file4, desk1",,ok
+scene2::569,scene2,569,Drawer1,drawer1,drawer1,,ok
+scene2::751,scene2,751,"Printer, Drawer2","printer, drawer2","printer, drawer2",,ok
+scene2::792,scene2,792,"Printer, Drawer2","printer, drawer2","printer, drawer2",,ok
+scene4_room1::15,scene4_room1,15,floor lamp,lamp,lamp,,ok
+scene4_room1::20,scene4_room1,20,sofa cushion,cushion,cushion,,ok
+scene4_room1::33,scene4_room1,33,heater,stove,stove,,ok
+scene4_room1::34,scene4_room1,34,blue armchair,armchair,armchair,,ok
+scene4_room1::37,scene4_room1,37,sofa cushion,cushion,cushion,,ok
+scene4_room1::44,scene4_room1,44,wall picture,painting,painting,,ok
+scene4_room1::45,scene4_room1,45,ceiling,ceiling_lamp,ceiling_lamp,,ok
+scene4_room1::64,scene4_room1,64,floor lamp,lamp,lamp,,ok
+scene4_room1::70,scene4_room1,70,"floor lamp, red sofa","lamp, sofa","lamp, sofa",,ok
+scene4_room1::76,scene4_room1,76,"cushions, blue armchair","cushion, armchair","cushion, armchair",,ok
+scene4_room1::94,scene4_room1,94,blue armchair,armchair,armchair,,ok
+scene4_room1::99,scene4_room1,99,"heater, red sofa","stove, sofa","stove, sofa",,ok
+scene4_room1::130,scene4_room1,130,"floor lamp, ceiling light","lamp, ceiling_lamp","lamp, ceiling_lamp",,ok
+scene4_room1::138,scene4_room1,138,"rug, red sofa","rug, sofa","rug, sofa",,ok
+scene4_room3::19,scene4_room3,19,room1,room1,room1,,ok
+scene4_room4::61,scene4_room4,61,centerpiece,vase,vase,,ok
+scene5::9,scene5,9,"drone 5, seawall","drone5, seawall","drone5, seawall",,ok
+scene5::35,scene5,35,"drone 5, coastal road","drone5, coastal_road","drone5, coastal_road",,ok
+scene5::58,scene5,58,"drone 4, coastal road","drone4, coastal_road","drone4, coastal_road",,ok
+scene5::131,scene5,131,"drone 5, coastal road","drone5, coastal_road","drone5, coastal_road",,ok

@@ -10,7 +10,7 @@ Up to three chronological evidence frames are selected inside each event without
 
 The evaluator loads hidden scene anchors only after inference. Each point is mapped to its nearest anchor for set evaluation and matched against GT points for margin-normalized and scene-normalized errors. Invalid outputs become empty sets and remain in the denominator. This is not unconstrained 3D reconstruction, 3D box grounding, or 3D IoU evaluation.
 
-The manifest has 3,971 evaluable interactions: scene1 800, scene2 791, scene3 800, scene4 rooms 784, and scene5 796.
+The repaired manifest has 4,000 evaluable interactions: scene1, scene2, scene3, and scene5 each contain 800; each of the four scene4 rooms contains 200.
 
 ## Metrics
 
@@ -23,17 +23,17 @@ The manifest has 3,971 evaluable interactions: scene1 800, scene2 791, scene3 80
 
 | Model | Valid | Anchor P | Anchor R | Anchor F1 | Exact | M-F1@1.0 | M-F1@2.0 | Mean scene-norm error |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Qwen3-VL-30B-A3B v9 | 3,971/3,971 | 0.4157 | 0.4362 | 0.4257 | 0.0169 | 0.2492 | 0.4107 | 0.1590 |
-| Qwen3-VL-8B | 3,971/3,971 | 0.4163 | 0.4132 | 0.4147 | 0.0222 | 0.2435 | 0.4009 | 0.1573 |
-| InternVL3-38B | 3,971/3,971 | 0.4228 | 0.3557 | 0.3863 | 0.0468 | 0.2302 | 0.3910 | 0.1642 |
+| Qwen3-VL-30B-A3B v9 | 4,000/4,000 | 0.4256 | 0.4399 | 0.4326 | 0.0185 | 0.2503 | 0.4105 | 0.1569 |
+| Qwen3-VL-8B | 4,000/4,000 | 0.4262 | 0.4166 | 0.4213 | 0.0225 | 0.2440 | 0.4004 | 0.1550 |
+| InternVL3-38B | 4,000/4,000 | 0.4337 | 0.3594 | 0.3931 | 0.0480 | 0.2310 | 0.3909 | 0.1615 |
 
-The deterministic gaze-copy baseline reaches anchor F1 0.4257 and Margin-F1@2.0 0.4196, essentially tying or slightly exceeding Qwen3-VL-30B. This baseline is necessary for interpreting the task.
+The deterministic gaze-copy baseline reaches anchor F1 0.4325 and Margin-F1@2.0 0.4193, nearly tying Qwen3-VL-30B on anchor F1 and exceeding it on Margin-F1. This baseline is necessary for interpreting the task.
 
 ## Completion Evidence
 
 - Qwen3-VL-8B merged evaluation: `qwen8/outputs/exam3_qwen3vl8b_point_grounding_merged_20260713/eval/evaluation_summary.json`
 - InternVL3-38B merged evaluation: `internvl/outputs/exam3_internvl38b_point_grounding_merged_20260714/eval/evaluation_summary.json`
-- Qwen3-VL-30B report: `exam3_point_grounding/reports/EXPERIMENT3_FULL_RESULTS_V9.md`
+- Unified report: `paper_experiment_evidence/EXPERIMENT3_FULL_RESULTS_V9.md`
 - Task definition: `exam3_point_grounding/EXPERIMENT3_TASK_DEFINITION.md`
 
 ## Reproduction Entry Points

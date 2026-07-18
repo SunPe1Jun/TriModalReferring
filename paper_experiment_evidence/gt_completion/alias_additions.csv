@@ -1,0 +1,27 @@
+scene,canonical_anchor,alias
+scene2,laptop1,Laptop3
+scene2,laptop1,laptop3
+scene2,laptop1,laptop 3
+scene2,laptop1,laptop 1
+scene2,printer,Printer1
+scene2,printer,printer1
+scene2,printer,printer 1
+scene2,drawer1,Drawer1
+scene2,drawer1,drawer 1
+scene2,drawer2,Drawer2
+scene2,drawer2,drawer 2
+scene4_room1,lamp,floor lamp
+scene4_room1,cushion,sofa cushion
+scene4_room1,cushion,cushions
+scene4_room1,armchair,blue armchair
+scene4_room1,painting,wall picture
+scene4_room1,sofa,red sofa
+scene4_room1,stove,heater
+scene4_room1,ceiling_lamp,ceiling
+scene4_room1,ceiling_lamp,ceiling light
+scene4_room1,ceiling_lamp,ceiling lamp
+scene4_room3,room1,room1_front_area
+scene4_room3,room1,area in front of room1
+scene4_room3,room1,front of room1
+scene4_room4,vase,centerpiece
+scene4_room4,vase,dining table centerpiece

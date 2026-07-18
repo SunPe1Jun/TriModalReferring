@@ -1,0 +1,12 @@
+{
+  "confirmed_mapping_count": 28,
+  "additional_scene2_569_ok": true,
+  "mapping_audit_row_count": 29,
+  "all_confirmed_mappings_ok": true,
+  "anchor_rows_audited": 135,
+  "loader_checks": 15,
+  "new_canonical_anchors": [
+    "scene2:drawer2"
+  ],
+  "alias_addition_count": 26
+}

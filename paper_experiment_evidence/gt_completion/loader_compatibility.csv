@@ -1,0 +1,16 @@
+scene,loader,anchor_count,drawer1_loaded,drawer2_loaded,status
+scene2,experiment1,42,True,True,ok
+scene2,experiment2,42,True,True,ok
+scene2,experiment3,42,True,True,ok
+scene4_room1,experiment1,19,False,False,ok
+scene4_room1,experiment2,19,False,False,ok
+scene4_room1,experiment3,19,False,False,ok
+scene4_room3,experiment1,19,False,False,ok
+scene4_room3,experiment2,19,False,False,ok
+scene4_room3,experiment3,19,False,False,ok
+scene4_room4,experiment1,28,False,False,ok
+scene4_room4,experiment2,28,False,False,ok
+scene4_room4,experiment3,28,False,False,ok
+scene5,experiment1,27,False,False,ok
+scene5,experiment2,27,False,False,ok
+scene5,experiment3,27,False,False,ok

@@ -1,0 +1,38 @@
+scene,canonical_anchor,category,rationale
+scene1,building1,large_structure,Named building used as a scene-level spatial destination or context.
+scene1,building2,large_structure,Named building used as a scene-level spatial destination or context.
+scene1,building3,large_structure,Named building used as a scene-level spatial destination or context.
+scene1,building4,large_structure,Named building used as a scene-level spatial destination or context.
+scene1,building5,large_structure,Named building used as a scene-level spatial destination or context.
+scene1,building6,large_structure,Named building used as a scene-level spatial destination or context.
+scene1,building7,large_structure,Named building used as a scene-level spatial destination or context.
+scene1,building8,large_structure,Named building used as a scene-level spatial destination or context.
+scene1,building9,large_structure,Named building used as a scene-level spatial destination or context.
+scene1,building10,large_structure,Named building used as a scene-level spatial destination or context.
+scene2,pointA,marked_location,Abstract marked location rather than an object instance.
+scene2,pointB,marked_location,Abstract marked location rather than an object instance.
+scene2,pointC,marked_location,Abstract marked location rather than an object instance.
+scene3,building1,large_structure,Named building used as a scene-level spatial destination or context.
+scene3,building2,large_structure,Named building used as a scene-level spatial destination or context.
+scene3,building3,large_structure,Named building used as a scene-level spatial destination or context.
+scene3,spotA,marked_location,Abstract marked location rather than an object instance.
+scene3,spotB,marked_location,Abstract marked location rather than an object instance.
+scene3,spotC,marked_location,Abstract marked location rather than an object instance.
+scene3,spotD,marked_location,Abstract marked location rather than an object instance.
+scene3,spotE,marked_location,Abstract marked location rather than an object instance.
+scene4_room3,room1,named_room,Named room-level region.
+scene4_room3,room2,named_room,Named room-level region.
+scene4_room3,room3,named_room,Named room-level region.
+scene4_room4,living_room,named_room,Named room-level region.
+scene4_room4,bedroom_doorway,named_room,Named transition region between rooms.
+scene4_room4,bedroom,named_room,Named room-level region.
+scene5,warehouseA,large_structure,Named warehouse used as a scene-level spatial destination or context.
+scene5,warehouseB,large_structure,Named warehouse used as a scene-level spatial destination or context.
+scene5,warehouseC,large_structure,Named warehouse used as a scene-level spatial destination or context.
+scene5,warehouseD,large_structure,Named warehouse used as a scene-level spatial destination or context.
+scene5,coastal_road,outdoor_region,Named route or outdoor spatial region.
+scene5,yard,outdoor_region,Named outdoor spatial region.
+scene5,inland_road,outdoor_region,Named route or outdoor spatial region.
+scene5,fence,outdoor_boundary,Scene-scale spatial boundary.
+scene5,seawall,outdoor_boundary,Scene-scale spatial boundary.
+scene5,yard_inland,outdoor_region,Named outdoor spatial region.

@@ -1,29 +1,29 @@
 object_name	x_world	y_world	z_world	aliases
-bed	-8.678	0.622	0.45
+bed	-8.678	0.622	0.45	""
 dining_table	-9.2	0.76	-2.7	dining table
-nightstand	-10	0.667	-0.57
-bench	-8.823	0.324	-4.457
-window	-10.5	1.46	-3.4
+nightstand	-10	0.667	-0.57	""
+bench	-8.823	0.324	-4.457	""
+window	-10.5	1.46	-3.4	""
 dining_chair	-8.65	0.76	-2.35	dining chair, dining chairs
-person	-8.72	0.98	-5.24
-pillow	-9.73	0.62	1.11
-blanket	-8.34	0.62	0.467
+person	-8.72	0.98	-5.24	""
+pillow	-9.73	0.62	1.11	""
+blanket	-8.34	0.62	0.467	""
 tissue_roll	-8.12	0.937	-1.41	tissue roll
 blue_sofa	-9.76	0.43	-4.46	blue sofa
 bedside_lamp	-9.92	0.78	1.67	bedside lamp, lamp2
-window2	-8.1	0.37	-5.62
-vase	-8.75	0.825	-3.122
+window2	-8.1	0.37	-5.62	""
+vase	-8.75	0.825	-3.122	centerpiece, dining table centerpiece
 overhead_cabinet	-7.887	1.66	-1.21	overhead cabinet
 curtains1	-9.76	1.3	-5.45	curtains
 desk_lamp	-10.143	1.3	-3	desk lamp, lamp
-curtains2	-10.059	1.087	-3.7
-pillow2	-9.84	0.43	-5.146
+curtains2	-10.059	1.087	-3.7	""
+pillow2	-9.84	0.43	-5.146	""
 wall_picture1	-10.15	1.48	-4.6	wall picture
-table	-7.96	0.9	-1.25
+table	-7.96	0.9	-1.25	""
 wall_picture2	-9.085	1.752	2.03	wall picture2
-pillow3	-9.42	0.62	0.73
+pillow3	-9.42	0.62	0.73	""
 living_room	-8.42	0	-0.45	living room
 bedroom_doorway	-7.395	0	-0.82	bedroom doorway
 bedroom	-8.42	0	-0.45	bedroom
-wall	-9.92	0.885	2.08
+wall	-9.92	0.885	2.08	""
 ceiling_lamp	-8.05	2.125	-3.227	ceiling lamp

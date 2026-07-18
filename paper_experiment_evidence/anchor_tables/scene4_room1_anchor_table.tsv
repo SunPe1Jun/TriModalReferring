@@ -1,20 +1,20 @@
 object_name	x_world	y_world	z_world	aliases
-cup	1.722	0.832	-6.512	
-person	-1.699	0	-5.498	
-cushion	1.321	0.503	-8.366	
-sofa	1.321	0.41	-9.1	
-flowerpot	1.98	1	-8.1	
-lamp	0.755	1.007	-10.64	
+cup	1.722	0.832	-6.512	""
+person	-1.699	0	-5.498	""
+cushion	1.321	0.503	-8.366	sofa cushion, cushions
+sofa	1.321	0.41	-9.1	red sofa
+flowerpot	1.98	1	-8.1	""
+lamp	0.755	1.007	-10.64	floor lamp
 dining_table	1.113	0.791	-6.594	dining table, table
-window	2.09	1.36	-8.08	
-door	-1.208	1.07	-4.33	
-painting	-1.82	1.44	-6.96	
-armchair	0.364	0.306	-7.95	
-stove	-1.569	0.506	-8.723	
-rug	-0.601	0.04	-8.376	
+window	2.09	1.36	-8.08	""
+door	-1.208	1.07	-4.33	""
+painting	-1.82	1.44	-6.96	wall picture
+armchair	0.364	0.306	-7.95	blue armchair
+stove	-1.569	0.506	-8.723	heater
+rug	-0.601	0.04	-8.376	""
 bookshelf	-1.68	1.495	-9.92	bookshelf, shelf
-cabinet	0.019	1.701	-4.364	
+cabinet	0.019	1.701	-4.364	""
 dining_chair	0.823	0.526	-6.984	dining chair
-ceiling_lamp	-0.055	2.09	-8.32	ceiling lamp
+ceiling_lamp	-0.055	2.09	-8.32	ceiling lamp, ceiling, ceiling light
 curtain1	1.719	1.626	-8.73	curtain, curtain1
-curtain2	1.719	1.557	-7.576	
+curtain2	1.719	1.557	-7.576	""

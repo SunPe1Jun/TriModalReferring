@@ -1,0 +1,29 @@
+unified_id,scene,row_index,canonical_referents
+scene2::260,scene2,260,laptop1
+scene2::265,scene2,265,printer
+scene2::335,scene2,335,printer
+scene2::361,scene2,361,"laptop1, printer"
+scene2::374,scene2,374,laptop1
+scene2::498,scene2,498,"desk4, file4, desk1"
+scene2::751,scene2,751,"printer, drawer2"
+scene2::792,scene2,792,"printer, drawer2"
+scene4_room1::15,scene4_room1,15,lamp
+scene4_room1::20,scene4_room1,20,cushion
+scene4_room1::33,scene4_room1,33,stove
+scene4_room1::34,scene4_room1,34,armchair
+scene4_room1::37,scene4_room1,37,cushion
+scene4_room1::44,scene4_room1,44,painting
+scene4_room1::45,scene4_room1,45,ceiling_lamp
+scene4_room1::64,scene4_room1,64,lamp
+scene4_room1::70,scene4_room1,70,"lamp, sofa"
+scene4_room1::76,scene4_room1,76,"cushion, armchair"
+scene4_room1::94,scene4_room1,94,armchair
+scene4_room1::99,scene4_room1,99,"stove, sofa"
+scene4_room1::130,scene4_room1,130,"lamp, ceiling_lamp"
+scene4_room1::138,scene4_room1,138,"rug, sofa"
+scene4_room3::19,scene4_room3,19,room1
+scene4_room4::61,scene4_room4,61,vase
+scene5::9,scene5,9,"drone5, seawall"
+scene5::35,scene5,35,"drone5, coastal_road"
+scene5::58,scene5,58,"drone4, coastal_road"
+scene5::131,scene5,131,"drone5, coastal_road"

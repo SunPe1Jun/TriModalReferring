@@ -1,7 +1,14 @@
-# Experiment 3: Candidate-Free Measured Point-Hypothesis Diagnostic
+# Experiment 3 Full Results (4,000 interactions)
 
-The model receives language, up to three evidence frames, camera/gaze/hand telemetry, and broad scene bounds. It outputs one or more measured Unity-world 3D points. Candidate anchor IDs and hidden GT points are not supplied to the model. The evaluator subsequently associates each predicted point with its nearest hidden anchor, computes set metrics, local distractor-margin metrics, and scene-normalized error.
+Experiment 3 is a candidate-free measured point-hypothesis diagnostic. The model receives language, target-free evidence frames, camera/gaze/hand telemetry, and scene-scale context, then emits measured Unity-world 3D points. Hidden anchors are used only by the evaluator.
 
-The final manifest contains 3,971 rows. Qwen3-VL-30B, Qwen3-VL-8B, and InternVL3-38B each have 3,971 valid parsed outputs. Single-target and multi-target partitions are preserved in the sample files. The gaze-copy baseline is a required diagnostic because the v9 prompt exposes copyable gaze hypotheses; it ties Qwen on anchor F1 and is slightly stronger on Margin-F1.
+| Model or baseline | Valid | Anchor F1 | Exact | Margin-F1@1.0 | Scene-normalized error |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Qwen3-VL-30B-A3B | 4000/4000 | 0.4326 | 0.0185 | 0.2503 | 0.1569 |
+| Qwen3-VL-8B | 4000/4000 | 0.4213 | 0.0225 | 0.2440 | 0.1550 |
+| InternVL3-38B | 4000/4000 | 0.3931 | 0.0480 | 0.2310 | 0.1615 |
+| gaze_copy | 4000/4000 | 0.4325 | 0.0435 | 0.2547 | 0.1519 |
+| hand_copy | 4000/4000 | 0.0914 | 0.0008 | 0.0069 | 0.8462 |
+| gaze_hand_fusion | 4000/4000 | 0.4069 | 0.0090 | 0.2302 | 0.2258 |
 
-These results support analysis of measured behavioral point hypotheses. They do not support claims of unconstrained 3D reconstruction, 3D boxes, object extents, or 3D IoU.
+The gaze-copy baseline is reported because gaze hypotheses are exposed by the task input and provide a strong copy-based control. The diagnostic does not measure object extents, boxes, 3D IoU, or unconstrained reconstruction.

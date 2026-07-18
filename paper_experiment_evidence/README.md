@@ -1,23 +1,21 @@
 # VR-TriRef Paper Experiment Evidence
 
-This bundle is a compact, read-only export of the final VR-TriRef experiments at commit `46db9cc`. It is intended for paper tables, denominator audits, and reproducibility review. No model inference was rerun and no raw prediction was edited.
+This compact evidence bundle is rebuilt from the final VR-TriRef evaluator outputs at source commit `ad190b747f73a8c613148cd6813a3a98e43c8818`. Existing model outputs were not edited: the newly evaluable interactions were inferred with each run's recorded configuration, then all metrics were recomputed with one evaluator per experiment.
 
-## Experiments
+## Experiments and denominators
 
-- **Experiment 1: closed-set 3D anchor selection.** The model receives a candidate anchor inventory and returns anchor IDs. Hit-All uses all 4,000 rows; Hit-Mapped, exact set, and macro set metrics use the 3,972 mapped rows. Micro TP/FP/FN are retained over all rows so predictions on unmapped rows remain visible.
-- **Experiment 2: projected-2D point diagnostic.** The model selects temporal panels and image-plane points. Temporal, Point@50/100/150/200, and Joint@50/100/150/200 are corpus metrics over all 4,000 rows. Missing records and parse failures remain empty predictions.
-- **Experiment 3: candidate-free measured point-hypothesis diagnostic.** The model emits measured 3D point hypotheses without candidate IDs. Nearest-anchor association is performed only by the evaluator; reported metrics include anchor-set P/R/F1, exact set, Margin-F1, scene-normalized error, and single/multi partitions. This is not unconstrained reconstruction, box grounding, or 3D IoU.
+- **Experiment 1: closed-set 3D anchor selection.** All 4,000 interactions now have fully mapped GT. Hit-All, Hit-Mapped, exact set, macro set F1, and micro P/R/F1 therefore share the 4,000-row denominator.
+- **Experiment 2: projected-2D point diagnostic.** Temporal, Point@50/100/150/200, and Joint@50/100/150/200 are corpus-level TP/FP/FN metrics over 4,000 interactions. Missing predictions remain empty predictions; the final runs have zero missing records. Qwen3-VL-30B retains 2 deterministic parse failures after three same-configuration attempts, listed in `denominator_audit/invalid_output_ids.csv`.
+- **Experiment 3: candidate-free measured point-hypothesis diagnostic.** All 4,000 interactions are evaluated. Models emit measured world-coordinate point hypotheses without candidate IDs or hidden GT in the model-facing manifest. Nearest-anchor association occurs only in evaluation. This is not unconstrained 3D reconstruction, 3D box grounding, or 3D IoU.
 
-## Final Runs
+## Fairness and provenance
 
-The final sources are the complete baseline directories named in `run_provenance/run_provenance.csv` and the source paths encoded in each prediction file. All three models use the same unified IDs and GT hashes within each experiment. Chat templates, image/video adapters, and checkpoints are recorded as run-specific provenance; these implementation differences are not silently treated as identical.
+Within each experiment, all three models have identical `scene::row_index` sample hashes and GT hashes. The semantic input protocol, prompt objective, evaluator, and greedy decoding policy are shared. Model-specific chat/vision adapters remain necessary; InternVL Exp.3 uses two evidence images and 8-bit loading with 256 output tokens, while Qwen uses up to three images and 512 tokens. These differences are explicit in `run_provenance/run_provenance.csv`.
 
-Qwen3-VL-8B Exp.1 has a legacy result with Hit-All `0.60075` under `data/match_eval_qwen3vl8b` and a final mention-first run with Hit-All `0.6625` under `qwen8/outputs/exam1_qwen3vl8b_baseline`. The final run uses 8 video frames, `mention_first`, and max 1,536 new tokens; the legacy run uses 16 frames, standard prompt strategy, and a different prompt. The difference is therefore attributable to documented run configuration, not an inferred model improvement.
+Qwen3-VL-8B Exp.1's paper run is `qwen8/outputs/exam1_qwen3vl8b_baseline`, reevaluated on the repaired 4,000-row GT. Its earlier `0.6625` value used the same final raw run before GT completion; `data/match_eval_qwen3vl8b` with Hit-All `0.60075` is a separate legacy prompt/input run. Neither value should replace the rebuilt result in `model_results.csv`.
 
-## Ablations and Limits
+## Ablations and limits
 
-The supplied ablations are descriptive hybrid/input/preprocessing/prompt ablations, not strict single-modality causal ablations. The bootstrap CSV contains headers but no bootstrap samples, so this bundle makes no significance, p-value, or confidence-interval claim.
+The Exp.1/Exp.2 ablations are descriptive hybrid/input/preprocessing/prompt ablations, not strict single-modality causal ablations. No bootstrap samples exist beyond the header-only file, so no p-value, significance, or confidence interval is reported.
 
-## Files
-
-`predictions/` contains nine compact sample-level CSVs; `denominator_audit/` contains explicit unmapped, missing, and Exp.3-excluded IDs; `manifests/` and `anchor_tables/` preserve compact GT context; `evaluators/` and `prompts_and_configs/` preserve the relevant code/prompt; `validation/` contains machine-readable checks; `model_results.csv` is the table-ready summary.
+The explicit location/region taxonomy contains 37 canonical anchors and identifies 1372 interactions. The old 1,461 count is not reproducible because no committed taxonomy supported it; it must not be cited.

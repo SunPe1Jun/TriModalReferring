@@ -1,7 +1,7 @@
 # Result Validation
 
-The exporter read the final evaluator details and wrote nine files with unique `scene::row_index` keys. All Exp.1/Exp.2 files contain 4,000 rows; all Exp.3 files contain 3,971 rows. Validation results are in `validation/validation_results.csv` and `.json`.
+Nine sample-level model files contain 4,000 unique `scene::row_index` keys each. Within every experiment, all three sample-set hashes and GT hashes match. Exp.1 has 4,000 mapped GT and zero unmapped rows; Exp.2 has zero missing prediction records; Exp.3 has 4,000 manifest rows and zero excluded IDs.
 
-Exp.1 has 3,972 mapped and 28 unmapped GT rows. Exp.2 keeps 4,000 denominator rows; Qwen3-VL-30B has 3,971 prediction records, 29 missing records, 7 parse failures, and 3,964 valid parses. Qwen3-VL-8B and InternVL3-38B each have 29 missing and no parse failures. Exp.3 excludes 29 rows from the 4,000-row interaction universe: 28 are unmapped in the Exp.3 anchor tables and one (`scene2::569`) is the mapped `drawer1` interaction absent from the Exp.3 scene2 anchor table (`missing_gt_anchor`). The explicit IDs are in `denominator_audit/exp3_excluded_ids.csv`.
+Qwen3-VL-30B Exp.2 has 3998 valid outputs and 2 invalid records. The two invalid records were produced on all three same-configuration retries and remain empty predictions in the 4,000-row corpus metrics. No output was manually repaired. Qwen3-VL-8B and InternVL3-38B have 4,000 valid Exp.2 outputs. All three Exp.3 runs have 4,000 valid outputs.
 
-The Exp.1 micro metrics in this bundle intentionally follow the audit definition and aggregate all rows, including false positives on unmapped GT rows.
+Machine-readable checks are in `validation/validation_results.csv` and `.json`; explicit invalid IDs are in `denominator_audit/invalid_output_ids.csv`. The 28 repaired mappings, `scene2::569`, anchor loader checks, aliases, and the sole new canonical anchor `drawer2 = (0.638, -1.227, 5.241)` are audited under `gt_completion/` and `location_region_audit/`.

@@ -1,0 +1,33 @@
+{
+  "validation_pass": true,
+  "cross_model_checks": {
+    "experiment1": {
+      "same_sample_set_hash": true,
+      "same_gt_hash": true,
+      "all_4000_rows": true
+    },
+    "experiment2": {
+      "same_sample_set_hash": true,
+      "same_gt_hash": true,
+      "all_4000_rows": true
+    },
+    "experiment3": {
+      "same_sample_set_hash": true,
+      "same_gt_hash": true,
+      "all_4000_rows": true
+    }
+  },
+  "denominator_file_row_counts": {
+    "unmapped_gt_ids.csv": 0,
+    "missing_prediction_ids.csv": 0,
+    "exp3_excluded_ids.csv": 0
+  },
+  "confirmed_mapping_count": 28,
+  "all_confirmed_mappings_ok": true,
+  "scene2_569_ok": true,
+  "new_canonical_anchors": [
+    "scene2:drawer2"
+  ],
+  "location_region_anchor_count": 37,
+  "location_region_interaction_count": 1372
+}
