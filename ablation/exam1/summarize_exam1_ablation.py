@@ -139,7 +139,7 @@ def fmt(value: Any) -> str:
 def write_csv(path: Path, rows: Sequence[Mapping[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(FIELDS))
+        writer = csv.DictWriter(handle, fieldnames=list(FIELDS), lineterminator="\n")
         writer.writeheader()
         for row in rows:
             writer.writerow({field: fmt(row.get(field, "")) for field in FIELDS})

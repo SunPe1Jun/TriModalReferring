@@ -4,11 +4,11 @@ Baseline is reused from `exam2/outputs_qwen3vl30b_2d_point_hybrid_v10/`. Manifes
 
 | Variant | Events | Predictions | Time F1 | Point@100 F1 | Joint@100 F1 | Delta Joint@100 | Mean Point Dist@100 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| full_baseline | 4000 | 8635 | 0.7333 | 0.2470 | 0.2038 |  | 57.9929 |
-| full_panels_no_crop | 4000 | 8637 | 0.7010 | 0.2236 | 0.1759 | -0.0280 | 58.7615 |
-| instruction_only_prompt | 4000 | 7582 | 0.6549 | 0.2262 | 0.1799 | -0.0240 | 57.5738 |
-| no_gaze | 4000 | 8632 | 0.6886 | 0.2027 | 0.1551 | -0.0488 | 59.0221 |
-| no_gaze_text_prior | 4000 | 8617 | 0.6896 | 0.2199 | 0.1725 | -0.0313 | 58.2964 |
+| full_baseline | 4000 | 8695 | 0.7348 | 0.2497 | 0.2067 |  | 57.8782 |
+| full_panels_no_crop | 4000 | 8637 | 0.7003 | 0.2245 | 0.1767 | -0.0300 | 58.6555 |
+| instruction_only_prompt | 4000 | 7582 | 0.6583 | 0.2294 | 0.1832 | -0.0235 | 57.6385 |
+| no_gaze | 4000 | 8632 | 0.6880 | 0.2030 | 0.1554 | -0.0512 | 59.0650 |
+| no_gaze_text_prior | 4000 | 8617 | 0.6890 | 0.2205 | 0.1730 | -0.0337 | 58.1662 |
 
 ## Notes
 

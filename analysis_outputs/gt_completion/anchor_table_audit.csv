@@ -1,0 +1,136 @@
+scene,canonical_anchor,x_world,y_world,z_world,aliases,status
+scene2,chair1,-0.951,-1.258,2.015,,ok
+scene2,chair2,0.238,-1.128,6.095,,ok
+scene2,chair3,0.018,-1.314,7.808,,ok
+scene2,chair4,2.571,-1.284,6.334,,ok
+scene2,chair5,3.497,-1.219,2.38,,ok
+scene2,chair6,3.497,-1.219,0.231,,ok
+scene2,chair7,5.99,-1.18,6.59,,ok
+scene2,chair8,5.9,-1.22,8.2,,ok
+scene2,desk1,-1.04,-1.16,2.983,,ok
+scene2,desk2,0.729,-0.992,5.47,,ok
+scene2,desk3,2.028,-0.856,5.976,,ok
+scene2,desk4,4.275,-0.908,2.32,,ok
+scene2,desk5,5.657,-0.958,2.515,,ok
+scene2,desk6,6.914,-0.828,7.119,,ok
+scene2,desk7,8.139,-0.89,6.121,,ok
+scene2,desk8,8.562,-0.896,2.253,,ok
+scene2,laptop1,-0.067,-0.98,2.987,"Laptop3, laptop 1",ok
+scene2,laptop2,6.905,-0.868,7.203,,ok
+scene2,PC1,-1.687,-0.822,2.645,,ok
+scene2,PC2,1.08,-0.832,6.021,,ok
+scene2,PC3,1.75,-0.829,5.973,,ok
+scene2,PC4,4.562,-0.824,2.658,,ok
+scene2,PC5,4.777,-0.813,0.443,,ok
+scene2,PC6,7.173,-0.802,6.409,,ok
+scene2,lamp1,-1.421,-0.884,2.867,,ok
+scene2,lamp2,1.061,-0.845,7.19,,ok
+scene2,lamp3,4.644,-0.832,2.26,,ok
+scene2,person1,-1.38,-1.059,7.181,,ok
+scene2,person2,3.878,-0.781,8.042,,ok
+scene2,person3,10.628,-0.912,6.584,,ok
+scene2,file1,-0.494,-0.686,2.923,,ok
+scene2,file2,1.183,-0.686,5.29,,ok
+scene2,file3,1.282,-1.396,4.766,,ok
+scene2,file4,4.855,-0.723,1.317,,ok
+scene2,file5,7.184,-0.781,5.959,,ok
+scene2,pointA,-1.063,-1.58,4.77,,ok
+scene2,pointB,8.648,-0.781,0.658,,ok
+scene2,pointC,4.291,-0.901,-0.076,,ok
+scene2,door1,11.08,-0.252,3.98,,ok
+scene2,printer,1.64,-0.75,4.79,Printer1,ok
+scene2,drawer1,0.097,-1.2,2.694,Drawer1,ok
+scene2,drawer2,0.638,-1.227,5.241,Drawer2,ok
+scene4_room1,cup,1.722,0.832,-6.512,,ok
+scene4_room1,person,-1.699,0.0,-5.498,,ok
+scene4_room1,cushion,1.321,0.503,-8.366,"sofa cushion, cushions",ok
+scene4_room1,sofa,1.321,0.41,-9.1,red sofa,ok
+scene4_room1,flowerpot,1.98,1.0,-8.1,,ok
+scene4_room1,lamp,0.755,1.007,-10.64,floor lamp,ok
+scene4_room1,dining_table,1.113,0.791,-6.594,"dining table, table",ok
+scene4_room1,window,2.09,1.36,-8.08,,ok
+scene4_room1,door,-1.208,1.07,-4.33,,ok
+scene4_room1,painting,-1.82,1.44,-6.96,wall picture,ok
+scene4_room1,armchair,0.364,0.306,-7.95,blue armchair,ok
+scene4_room1,stove,-1.569,0.506,-8.723,heater,ok
+scene4_room1,rug,-0.601,0.04,-8.376,,ok
+scene4_room1,bookshelf,-1.68,1.495,-9.92,"bookshelf, shelf",ok
+scene4_room1,cabinet,0.019,1.701,-4.364,,ok
+scene4_room1,dining_chair,0.823,0.526,-6.984,dining chair,ok
+scene4_room1,ceiling_lamp,-0.055,2.09,-8.32,"ceiling lamp, ceiling, ceiling light",ok
+scene4_room1,curtain1,1.719,1.626,-8.73,"curtain, curtain1",ok
+scene4_room1,curtain2,1.719,1.557,-7.576,,ok
+scene4_room3,cabinet,2.18,0.61,-1.84,,ok
+scene4_room3,shelf,2.28,1.49,-4.76,,ok
+scene4_room3,cushion,5.82,0.62,-4.1,,ok
+scene4_room3,chair,5.54,0.629,-3.23,chairs,ok
+scene4_room3,vase,1.92,0.9,-1.7,,ok
+scene4_room3,sofa,5.82,0.36,-4.65,,ok
+scene4_room3,book,2.28,1.48,-5.22,books,ok
+scene4_room3,dining_table,5.31,0.75,-2.87,"dining table, table",ok
+scene4_room3,person,3.15,0.9,-1.1,,ok
+scene4_room3,desk,4.71,0.36,-4.65,,ok
+scene4_room3,lamp,6.37,1.29,-3.16,,ok
+scene4_room3,rug,3.03,0.0,-2.46,,ok
+scene4_room3,stove,2.554,0.99,-3.92,,ok
+scene4_room3,window,6.61,1.34,-3.21,,ok
+scene4_room3,wall_picture1,1.78,1.61,-1.72,wall picture,ok
+scene4_room3,wall_picture2,6.32,1.79,-2.0,wall picture2,ok
+scene4_room3,room1,1.448,1.229,-2.661,"room1_front_area, area in front of room1, front of room1",ok
+scene4_room3,room2,2.132,1.29,-1.04,,ok
+scene4_room3,room3,3.298,1.29,-0.47,,ok
+scene4_room4,bed,-8.678,0.622,0.45,,ok
+scene4_room4,dining_table,-9.2,0.76,-2.7,dining table,ok
+scene4_room4,nightstand,-10.0,0.667,-0.57,,ok
+scene4_room4,bench,-8.823,0.324,-4.457,,ok
+scene4_room4,window,-10.5,1.46,-3.4,,ok
+scene4_room4,dining_chair,-8.65,0.76,-2.35,"dining chair, dining chairs",ok
+scene4_room4,person,-8.72,0.98,-5.24,,ok
+scene4_room4,pillow,-9.73,0.62,1.11,,ok
+scene4_room4,blanket,-8.34,0.62,0.467,,ok
+scene4_room4,tissue_roll,-8.12,0.937,-1.41,tissue roll,ok
+scene4_room4,blue_sofa,-9.76,0.43,-4.46,blue sofa,ok
+scene4_room4,bedside_lamp,-9.92,0.78,1.67,"bedside lamp, lamp2",ok
+scene4_room4,window2,-8.1,0.37,-5.62,,ok
+scene4_room4,vase,-8.75,0.825,-3.122,"centerpiece, dining table centerpiece",ok
+scene4_room4,overhead_cabinet,-7.887,1.66,-1.21,overhead cabinet,ok
+scene4_room4,curtains1,-9.76,1.3,-5.45,curtains,ok
+scene4_room4,desk_lamp,-10.143,1.3,-3.0,"desk lamp, lamp",ok
+scene4_room4,curtains2,-10.059,1.087,-3.7,,ok
+scene4_room4,pillow2,-9.84,0.43,-5.146,,ok
+scene4_room4,wall_picture1,-10.15,1.48,-4.6,wall picture,ok
+scene4_room4,table,-7.96,0.9,-1.25,,ok
+scene4_room4,wall_picture2,-9.085,1.752,2.03,wall picture2,ok
+scene4_room4,pillow3,-9.42,0.62,0.73,,ok
+scene4_room4,living_room,-8.42,0.0,-0.45,living room,ok
+scene4_room4,bedroom_doorway,-7.395,0.0,-0.82,bedroom doorway,ok
+scene4_room4,bedroom,-8.42,0.0,-0.45,bedroom,ok
+scene4_room4,wall,-9.92,0.885,2.08,,ok
+scene4_room4,ceiling_lamp,-8.05,2.125,-3.227,ceiling lamp,ok
+scene5,drone1,-14.58,1.29,9.49,,ok
+scene5,drone2,-14.58,3.31,16.96,,ok
+scene5,drone3,-5.7,1.53,14.43,,ok
+scene5,drone4,-1.66,1.72,14.8,,ok
+scene5,drone5,-1.51,3.14,11.69,,ok
+scene5,oil_tank1,-15.8,-1.13,16.36,,ok
+scene5,oil_tank2,-13.86,-1.13,16.36,,ok
+scene5,oil_tank3,-11.75,-1.13,16.36,,ok
+scene5,oil_tank4,-9.6,-1.13,16.36,,ok
+scene5,oil_tank5,-15.84,-1.13,18.62,,ok
+scene5,oil_tank6,-13.96,-1.13,18.62,,ok
+scene5,oil_tank7,-11.91,-1.13,18.62,,ok
+scene5,oil_tank8,-9.7,-1.13,18.62,,ok
+scene5,warehouseA,-7.76,-0.77,48.43,,ok
+scene5,warehouseB,-15.8,0.16,29.7,,ok
+scene5,warehouseC,-51.42,-0.3,11.28,,ok
+scene5,warehouseD,-53.67,-1.01,22.4,,ok
+scene5,truck,-2.57,-5.1,21.1,,ok
+scene5,coastal_road,-24.89,-5.61,9.22,,ok
+scene5,yard,-10.1,-4.87,34.8,,ok
+scene5,inland_road,0.85,-4.8,29.0,,ok
+scene5,fence,-6.75,-3.5,27.4,,ok
+scene5,crate,-0.67,-4.96,19.0,,ok
+scene5,person1,-4.04,-5.04,16.554,,ok
+scene5,person2,-16.91,-5.0,6.4,,ok
+scene5,seawall,2.8,3.2,65.66,,ok
+scene5,yard_inland,-26.27,-5.399,18.0,,ok

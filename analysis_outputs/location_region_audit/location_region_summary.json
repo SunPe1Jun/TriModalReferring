@@ -1,0 +1,18 @@
+{
+  "taxonomy_source": "analysis_configs/location_region_anchor_classification.csv",
+  "location_region_anchor_count": 37,
+  "location_region_interaction_count": 1372,
+  "previous_evidence_interaction_count_under_same_taxonomy": 1367,
+  "added_interaction_count": 5,
+  "removed_interaction_count": 0,
+  "added_ids": [
+    "scene4_room3::19",
+    "scene5::131",
+    "scene5::35",
+    "scene5::58",
+    "scene5::9"
+  ],
+  "removed_ids": [],
+  "legacy_1461_reproducible": false,
+  "legacy_1461_note": "The prior 1,461 value has no committed taxonomy and is not reproduced by this explicit classification."
+}

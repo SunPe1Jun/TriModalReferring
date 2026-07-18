@@ -647,6 +647,39 @@ def build_model_inputs(
     return processor(text=[SYSTEM_PROMPT + "\n\n" + prompt_text], images=list(images), return_tensors="pt")
 
 
+def strip_json_line_comments(value: str) -> str:
+    """Remove JSONC-style line comments without touching quoted strings."""
+    output: List[str] = []
+    in_string = False
+    escaped = False
+    index = 0
+    while index < len(value):
+        char = value[index]
+        if in_string:
+            output.append(char)
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                in_string = False
+            index += 1
+            continue
+        if char == '"':
+            in_string = True
+            output.append(char)
+            index += 1
+            continue
+        if char == "/" and index + 1 < len(value) and value[index + 1] == "/":
+            index += 2
+            while index < len(value) and value[index] not in "\r\n":
+                index += 1
+            continue
+        output.append(char)
+        index += 1
+    return "".join(output)
+
+
 def extract_json(raw_response: str) -> Optional[Dict[str, Any]]:
     candidates: List[str] = []
     stripped = raw_response.strip()
@@ -657,6 +690,7 @@ def extract_json(raw_response: str) -> Optional[Dict[str, Any]]:
     for candidate in candidates:
         cleaned = re.sub(r"^```(?:json)?", "", candidate.strip()).strip()
         cleaned = re.sub(r"```$", "", cleaned).strip()
+        cleaned = strip_json_line_comments(cleaned)
         cleaned = re.sub(r",\s*([}\]])", r"\1", cleaned)
         try:
             payload = json.loads(cleaned)

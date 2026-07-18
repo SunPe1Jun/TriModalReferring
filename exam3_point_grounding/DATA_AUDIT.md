@@ -23,7 +23,7 @@ The model-facing manifest excludes candidate anchors, GT coordinates, GT anchor 
 | scene | anchors | x range | y range | z range | robust diagonal | nearest-anchor median |
 |---|---:|---:|---:|---:|---:|---:|
 | scene1 | 22 | -56.330..75.480 | -9.772..-4.630 | 22.960..121.330 | 117.217 | 11.715882382475508 |
-| scene2 | 40 | -1.687..11.080 | -1.580..-0.252 | -0.076..8.200 | 12.553 | 0.7277031488758038 |
+| scene2 | 42 | -1.687..11.080 | -1.580..-0.252 | -0.076..8.200 | 12.417 | 0.7164502774093955 |
 | scene3 | 22 | -37.900..33.320 | -6.686..6.400 | 1.980..63.580 | 63.633 | 5.793661191336616 |
 | scene4_room1 | 19 | -1.820..2.090 | 0.000..2.090 | -10.640..-4.330 | 6.951 | 1.0619387929631348 |
 | scene4_room2 | 20 | -8.432..7.537 | -2.747..2.573 | -5.257..-0.996 | 7.109 | 0.5755517525538048 |
@@ -33,11 +33,11 @@ The model-facing manifest excludes candidate anchors, GT coordinates, GT anchor 
 
 ## Manifest Coverage
 
-- model-facing samples: 3971
-- evaluator GT rows: 3971
-- status counts: {'ok': 3971, 'missing_gt_anchor': 29}
-- gaze-valid selected frames: 10926 / 10926
-- hand-valid selected frames: 10926 / 10926
+- model-facing samples: 4000
+- evaluator GT rows: 4000
+- status counts: {'ok': 4000}
+- gaze-valid selected frames: 11001 / 11001
+- hand-valid selected frames: 11001 / 11001
 
 ## Same-Coordinate Assumption
 

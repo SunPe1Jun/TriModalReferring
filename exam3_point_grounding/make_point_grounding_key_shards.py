@@ -23,6 +23,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--prefix", default="shard")
     parser.add_argument("--num_shards", type=int, default=2)
     parser.add_argument("--existing_raw_dirs", nargs="*", default=[])
+    parser.add_argument("--sample_keys_file", help="Optional allowed scene:row_index key list.")
     parser.add_argument("--round_robin", action="store_true", help="Use round-robin assignment instead of contiguous chunks.")
     return parser.parse_args()
 
@@ -63,6 +64,16 @@ def main() -> None:
     gt_rows = read_csv_rows((repo_root / args.gt_manifest).resolve())
     raw_dirs = [Path(item).resolve() for item in args.existing_raw_dirs]
     all_keys = [key_from_row(row) for row in gt_rows]
+    if args.sample_keys_file:
+        allowed = {
+            normalize_text(line)
+            for line in Path(args.sample_keys_file).read_text(encoding="utf-8").splitlines()
+            if normalize_text(line) and not normalize_text(line).startswith("#")
+        }
+        unknown = allowed - set(all_keys)
+        if unknown:
+            raise ValueError(f"sample keys not found in GT manifest: {sorted(unknown)}")
+        all_keys = [key for key in all_keys if key in allowed]
     remaining_keys = [key for key in all_keys if not has_existing_raw(key, raw_dirs)]
     shards = split_keys(remaining_keys, args.num_shards, args.round_robin)
     output_dir = Path(args.output_dir).resolve()

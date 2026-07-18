@@ -1,0 +1,10 @@
+{
+  "model": "qwen30",
+  "original_rows": 3971,
+  "supplement_attempt_count": 3,
+  "supplement_rows_across_attempts": 40,
+  "supplement_unique_rows": 36,
+  "merged_rows": 4000,
+  "merged_unique_interactions": 4000,
+  "parse_failures_after_merge": 2
+}

@@ -1,0 +1,7 @@
+{
+  "model": "qwen30",
+  "original_rows": 3971,
+  "supplement_rows": 29,
+  "merged_rows": 4000,
+  "parse_failures": 0
+}

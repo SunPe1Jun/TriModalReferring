@@ -1,0 +1,10 @@
+{
+  "manifest_rows": 4000,
+  "gt_rows": 4000,
+  "completion_id_count": 29,
+  "model_target_count": {
+    "qwen30": 29,
+    "qwen8": 29,
+    "internvl": 29
+  }
+}

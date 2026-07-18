@@ -1,0 +1,16 @@
+{
+  "gt_total": 29,
+  "existing_raw_dirs": [],
+  "existing_count": 0,
+  "remaining_count": 29,
+  "num_shards": 2,
+  "round_robin": false,
+  "shard_files": [
+    "/workspace/usr3/TriModal-Referring/analysis_outputs/experiment_completion/exp3/internvl_key_shards/completion_0.txt",
+    "/workspace/usr3/TriModal-Referring/analysis_outputs/experiment_completion/exp3/internvl_key_shards/completion_1.txt"
+  ],
+  "shard_counts": [
+    15,
+    14
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "confirmed_mapping_count": 28,
+  "scene2_extra_exp3_repair": {
+    "unified_id": "scene2::569",
+    "canonical_referents": [
+      "drawer1"
+    ]
+  },
+  "new_canonical_anchors": [
+    {
+      "scene": "scene2",
+      "object_name": "drawer2",
+      "point": [
+        0.638,
+        -1.227,
+        5.241
+      ]
+    }
+  ],
+  "forbidden_new_anchors": [
+    "laptop3",
+    "Printer1",
+    "heater",
+    "ceiling",
+    "room1_front_area",
+    "centerpiece"
+  ],
+  "changes_this_invocation": 0,
+  "alias_addition_count": 26
+}
