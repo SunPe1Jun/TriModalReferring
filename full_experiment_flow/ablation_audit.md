@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Measure which input families affect Experiments 1 and 2, while auditing whether each run changes only one modality and whether results can support paired statistical claims.
+Measure which input families affect all three experiments, while auditing whether each run changes only one modality and whether results can support paired statistical claims.
 
 ## Experiment 1 Variants
 
@@ -35,9 +35,24 @@ Measure which input families affect Experiments 1 and 2, while auditing whether 
 - Experiment 2 `no_gaze` also changes crop preprocessing; `no_visual` changes media type/count/geometry and prompt text.
 - The paired-bootstrap CSVs therefore contain headers only. These runs support descriptive hybrid-ablation comparisons, not strict single-modality significance claims.
 
+## Experiment 3 Variants
+
+| Variant | Category | Anchor F1 | Exact | Margin-F1@1.0 | Delta Anchor F1 |
+| --- | --- | ---: | ---: | ---: | ---: |
+| full | baseline | 0.4326 | 0.0185 | 0.2503 | 0.0000 |
+| no_visual | post-selection input | 0.4341 | 0.0180 | 0.2518 | +0.0014 |
+| no_gaze | post-selection input | 0.0673 | 0.0013 | 0.0055 | -0.3653 |
+| no_hand | post-selection input | 0.4353 | 0.0187 | 0.2527 | +0.0027 |
+| no_gaze_hand | post-selection input | 0.0542 | 0.0000 | 0.0000 | -0.3784 |
+| no_instruction | post-selection input | 0.4332 | 0.0177 | 0.2510 | +0.0006 |
+
+All five variants contain the same 4,000 unique sample IDs and GT sets; 20,000 prompt-mask audits pass. `no_gaze_hand` has one invalid output retained as an empty prediction. The frozen frame selector used gaze/hand availability before masking, so these remain descriptive input ablations. The near-invariance of `no_visual`, `no_hand`, and `no_instruction`, together with the sharp `no_gaze` drop, shows that the v9 copy-oriented protocol is dominated by exposed gaze hypotheses.
+
 ## Authoritative Sources
 
 - `analysis_outputs/ablation_audit/ABLATION_AUDIT.md`
 - `analysis_outputs/ablation_audit/RESULT_VALIDATION.md`
 - `analysis_outputs/ablation_audit/anchor_ablation_summary.csv`
 - `analysis_outputs/ablation_audit/projected2d_ablation_summary.csv`
+- `ablation/exam3/reports/full_v3/EXPERIMENT3_QWEN30B_ABLATION.md`
+- `paper_experiment_evidence/ablation/experiment3_qwen30b/`

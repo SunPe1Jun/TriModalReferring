@@ -29,6 +29,12 @@ The repaired manifest has 4,000 evaluable interactions: scene1, scene2, scene3, 
 
 The deterministic gaze-copy baseline reaches anchor F1 0.4325 and Margin-F1@2.0 0.4193, nearly tying Qwen3-VL-30B on anchor F1 and exceeding it on Margin-F1. This baseline is necessary for interpreting the task.
 
+## Qwen3-VL-30B Input Ablation
+
+Removing model-visible gaze cues reduces anchor F1 from 0.4326 to 0.0673 and Margin-F1@1.0 from 0.2503 to 0.0055. In contrast, `no_visual`, `no_hand`, and `no_instruction` remain within 0.003 anchor F1 of the full condition. This indicates that the frozen v9 prompt is dominated by exposed copyable gaze hypotheses. Since evidence frames were selected before masking with a selector that used gaze/hand availability, these are descriptive post-selection input ablations rather than strict causal modality estimates.
+
+The five variants each contain 4,000 samples. One `no_gaze_hand` output is invalid and remains an empty prediction in the denominator. Detailed results and compact evidence are under `ablation/exam3/reports/full_v3/` and `paper_experiment_evidence/ablation/experiment3_qwen30b/`.
+
 ## Completion Evidence
 
 - Qwen3-VL-8B merged evaluation: `qwen8/outputs/exam3_qwen3vl8b_point_grounding_merged_20260713/eval/evaluation_summary.json`

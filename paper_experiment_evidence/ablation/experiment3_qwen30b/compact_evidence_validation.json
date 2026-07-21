@@ -1,0 +1,105 @@
+{
+  "validation_pass": true,
+  "variants": {
+    "no_visual": {
+      "checks": {
+        "row_count_4000": true,
+        "unique_ids_4000": true,
+        "sample_set_matches_gt": true,
+        "raw_prompt_mask_audit_pass": true,
+        "invalid_count_matches_evaluator": true,
+        "anchor_metrics_match_evaluator": true,
+        "exact_rate_matches_evaluator": true,
+        "margin_metrics_match_evaluator": true,
+        "recorded_validation_pass": true
+      },
+      "validation_pass": true,
+      "sample_set_sha256": "2279dc1ecab2f2fa52f4a7264b6c3ca7a117414f3585b54ec7ce12503ca2ce42",
+      "gt_sha256": "9cb734beb7a410e8b3f9a594f2bdaf6602b90855806d6201ed2a647d05c09873",
+      "row_count": 4000,
+      "valid_count": 4000,
+      "invalid_count": 0,
+      "evidence_file": "paper_experiment_evidence/ablation/experiment3_qwen30b/predictions/qwen3_vl_30b_no_visual.csv"
+    },
+    "no_gaze": {
+      "checks": {
+        "row_count_4000": true,
+        "unique_ids_4000": true,
+        "sample_set_matches_gt": true,
+        "raw_prompt_mask_audit_pass": true,
+        "invalid_count_matches_evaluator": true,
+        "anchor_metrics_match_evaluator": true,
+        "exact_rate_matches_evaluator": true,
+        "margin_metrics_match_evaluator": true,
+        "recorded_validation_pass": true
+      },
+      "validation_pass": true,
+      "sample_set_sha256": "2279dc1ecab2f2fa52f4a7264b6c3ca7a117414f3585b54ec7ce12503ca2ce42",
+      "gt_sha256": "9cb734beb7a410e8b3f9a594f2bdaf6602b90855806d6201ed2a647d05c09873",
+      "row_count": 4000,
+      "valid_count": 4000,
+      "invalid_count": 0,
+      "evidence_file": "paper_experiment_evidence/ablation/experiment3_qwen30b/predictions/qwen3_vl_30b_no_gaze.csv"
+    },
+    "no_hand": {
+      "checks": {
+        "row_count_4000": true,
+        "unique_ids_4000": true,
+        "sample_set_matches_gt": true,
+        "raw_prompt_mask_audit_pass": true,
+        "invalid_count_matches_evaluator": true,
+        "anchor_metrics_match_evaluator": true,
+        "exact_rate_matches_evaluator": true,
+        "margin_metrics_match_evaluator": true,
+        "recorded_validation_pass": true
+      },
+      "validation_pass": true,
+      "sample_set_sha256": "2279dc1ecab2f2fa52f4a7264b6c3ca7a117414f3585b54ec7ce12503ca2ce42",
+      "gt_sha256": "9cb734beb7a410e8b3f9a594f2bdaf6602b90855806d6201ed2a647d05c09873",
+      "row_count": 4000,
+      "valid_count": 4000,
+      "invalid_count": 0,
+      "evidence_file": "paper_experiment_evidence/ablation/experiment3_qwen30b/predictions/qwen3_vl_30b_no_hand.csv"
+    },
+    "no_gaze_hand": {
+      "checks": {
+        "row_count_4000": true,
+        "unique_ids_4000": true,
+        "sample_set_matches_gt": true,
+        "raw_prompt_mask_audit_pass": true,
+        "invalid_count_matches_evaluator": true,
+        "anchor_metrics_match_evaluator": true,
+        "exact_rate_matches_evaluator": true,
+        "margin_metrics_match_evaluator": true,
+        "recorded_validation_pass": true
+      },
+      "validation_pass": true,
+      "sample_set_sha256": "2279dc1ecab2f2fa52f4a7264b6c3ca7a117414f3585b54ec7ce12503ca2ce42",
+      "gt_sha256": "9cb734beb7a410e8b3f9a594f2bdaf6602b90855806d6201ed2a647d05c09873",
+      "row_count": 4000,
+      "valid_count": 3999,
+      "invalid_count": 1,
+      "evidence_file": "paper_experiment_evidence/ablation/experiment3_qwen30b/predictions/qwen3_vl_30b_no_gaze_hand.csv"
+    },
+    "no_instruction": {
+      "checks": {
+        "row_count_4000": true,
+        "unique_ids_4000": true,
+        "sample_set_matches_gt": true,
+        "raw_prompt_mask_audit_pass": true,
+        "invalid_count_matches_evaluator": true,
+        "anchor_metrics_match_evaluator": true,
+        "exact_rate_matches_evaluator": true,
+        "margin_metrics_match_evaluator": true,
+        "recorded_validation_pass": true
+      },
+      "validation_pass": true,
+      "sample_set_sha256": "2279dc1ecab2f2fa52f4a7264b6c3ca7a117414f3585b54ec7ce12503ca2ce42",
+      "gt_sha256": "9cb734beb7a410e8b3f9a594f2bdaf6602b90855806d6201ed2a647d05c09873",
+      "row_count": 4000,
+      "valid_count": 4000,
+      "invalid_count": 0,
+      "evidence_file": "paper_experiment_evidence/ablation/experiment3_qwen30b/predictions/qwen3_vl_30b_no_instruction.csv"
+    }
+  }
+}

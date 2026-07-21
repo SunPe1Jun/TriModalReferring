@@ -21,7 +21,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo_root", default=".")
     parser.add_argument("--output_root", default="ablation/exam3/outputs_qwen3vl30b_v9_input_mask_v3_full")
-    parser.add_argument("--expected", type=int, default=3971)
+    parser.add_argument("--expected", type=int, default=4000)
     args = parser.parse_args()
     root = Path(args.repo_root).resolve()
     output_root = root / args.output_root

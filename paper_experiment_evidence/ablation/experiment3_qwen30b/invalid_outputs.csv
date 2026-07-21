@@ -1,0 +1,2 @@
+model_name,experiment,ablation_variant,scene,row_index,unified_id,event_id,parse_status,invalid_reason,denominator_policy
+Qwen3-VL-30B-A3B-Instruct,experiment3,no_gaze_hand,scene4_room1,32,scene4_room1::32,scene4_33,parse_failure,point_entry_0_wrong_dimension,retained as empty prediction

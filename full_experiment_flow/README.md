@@ -43,7 +43,7 @@ Exact source paths and additional metrics are recorded in `results/model_results
 2. `experiment2_projected_2d.md`
 3. `experiment3_candidate_free_3d.md`
 4. `ablation_audit.md`
-5. `results/model_results.csv` and `results/ablation_results.csv`
+5. `results/model_results.csv`, `results/ablation_results.csv`, and `results/experiment3_ablation_results.csv`
 
 ## Claim Boundaries
 

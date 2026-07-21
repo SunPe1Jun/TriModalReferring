@@ -1,11 +1,12 @@
 # VR-TriRef 模态消融实验总结
 
-本文档总结当前 `ablation/` 下已经完成的实验一、实验二消融结果。实验三暂不纳入本轮消融，因为其实验定义正在重构。
+本文档总结当前 `ablation/` 下已经完成的三个实验的描述性消融结果。
 
 结果来源以以下两个全量 summary 为准：
 
 - 实验一：`ablation/exam1/reports/exam1_ablation_summary.csv`
 - 实验二：`ablation/exam2/reports/exam2_ablation_summary.csv`
+- 实验三：`ablation/exam3/reports/full_v3/ablation_summary.csv`
 
 注意：`ablation/reports/ABLATION_RESULTS.md` 中实验一 `no_gaze`、`no_hand` 曾出现过 2 条样本的旧 smoke 行；本文档采用实验一单独报告中的 4000 条全量结果。
 
@@ -148,4 +149,29 @@ Baseline：
 1. 对实验一做视频帧级 gaze marker masking，得到更严格的 `no_gaze`。
 2. 对实验一做 hand region masking，或者改用 selected evidence frames 而不是原视频，以便做像素级 hand ablation。
 3. 对实验二补一个 full blank-visual run，作为更彻底的 visual ablation。
-4. 如果未来实验三稳定下来，再单独设计 point-grounding 的 modality ablation，不要和当前实验一/二混在同一表中。
+4. 实验三应进一步设计在 frame selection 之前移除模态的严格对照，以区分 selector 依赖与模型推理依赖。
+
+## 实验三结果
+
+实验三采用冻结的 v9 `candidate-free measured point-hypothesis diagnostic`。五个变体使用相同的 4,000 条样本、evidence frame、Qwen3-VL-30B checkpoint、parser、greedy decoding 和 evaluator，仅在 panel 选择完成后遮蔽模型可见字段。
+
+| Variant | Valid | Anchor F1 | 相对 Full | Exact | Margin-F1@1.0 | Margin-F1@2.0 | Scene-normalized error |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| full | 4000 | 0.4326 | - | 0.0185 | 0.2503 | 0.4105 | 0.1569 |
+| no_visual | 4000 | 0.4341 | +0.0014 | 0.0180 | 0.2518 | 0.4120 | 0.1560 |
+| no_gaze | 4000 | 0.0673 | -0.3653 | 0.0013 | 0.0055 | 0.0263 | 0.3771 |
+| no_hand | 4000 | 0.4353 | +0.0027 | 0.0187 | 0.2527 | 0.4134 | 0.1558 |
+| no_gaze_hand | 3999 | 0.0542 | -0.3784 | 0.0000 | 0.0000 | 0.0037 | 0.5376 |
+| no_instruction | 4000 | 0.4332 | +0.0006 | 0.0177 | 0.2510 | 0.4111 | 0.1565 |
+
+### 实验三结论与边界
+
+1. 移除 gaze 后 Anchor F1 从 `0.4326` 降至 `0.0673`，Margin-F1@1.0 从 `0.2503` 降至 `0.0055`，表明当前 v9 协议强依赖模型可见的 gaze point hypotheses。
+
+2. `no_visual`、`no_hand` 和 `no_instruction` 与 full 几乎一致，且分别有 `98.40%`、`96.95%`、`98.65%` 的样本输出完全相同。这并不证明这些模态在一般指代任务中无用，而是说明当前 prompt 默认要求复制 gaze hypotheses，使其主导了模型输出。
+
+3. 冻结的 target-free frame selector 在遮蔽前使用了 gaze/hand availability 与 stability。因此 `no_gaze`、`no_hand`、`no_gaze_hand` 属于 post-selection input ablation，不能写成严格的单模态因果消融。
+
+4. `no_gaze_hand` 有一条 invalid：`scene4_room1::32` 输出了六维 point。该样本作为空预测保留在 4,000 分母中，未人工修改模型输出。
+
+完整报告见 `ablation/exam3/reports/full_v3/EXPERIMENT3_QWEN30B_ABLATION.md`，逐样本紧凑证据见 `paper_experiment_evidence/ablation/experiment3_qwen30b/`。

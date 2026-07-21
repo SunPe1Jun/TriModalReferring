@@ -36,3 +36,25 @@ Progress can be checked without touching the running jobs:
 ```bash
 python ablation/exam3/monitor_full.py
 ```
+
+## Final Results
+
+The five 4,000-sample Qwen3-VL-30B runs are complete. The authoritative report is
+`ablation/exam3/reports/full_v3/EXPERIMENT3_QWEN30B_ABLATION.md`.
+
+| Variant | Valid | Anchor F1 | Exact | Margin-F1@1.0 | Margin-F1@2.0 | Mean scene-normalized error |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| full | 4,000 | 0.4326 | 0.0185 | 0.2503 | 0.4105 | 0.1569 |
+| no_visual | 4,000 | 0.4341 | 0.0180 | 0.2518 | 0.4120 | 0.1560 |
+| no_gaze | 4,000 | 0.0673 | 0.0013 | 0.0055 | 0.0263 | 0.3771 |
+| no_hand | 4,000 | 0.4353 | 0.0187 | 0.2527 | 0.4134 | 0.1558 |
+| no_gaze_hand | 3,999 | 0.0542 | 0.0000 | 0.0000 | 0.0037 | 0.5376 |
+| no_instruction | 4,000 | 0.4332 | 0.0177 | 0.2510 | 0.4111 | 0.1565 |
+
+These are descriptive post-selection input ablations. The frozen frame selector used gaze and hand availability, and the v9 prompt asks the model to copy measured gaze hypotheses by default. The sharp `no_gaze` degradation therefore measures dependence on exposed gaze hypotheses under this protocol; it is not a strict causal estimate of gaze contribution in general referential grounding.
+
+Export compact sample-level evidence without changing raw outputs:
+
+```bash
+python ablation/exam3/export_compact_evidence.py
+```

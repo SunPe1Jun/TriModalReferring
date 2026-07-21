@@ -51,7 +51,7 @@ def write_csv(path: Path, rows: List[Mapping[str, Any]]) -> None:
             if column not in columns:
                 columns.append(column)
     with path.open("w", encoding="utf-8-sig", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=columns)
+        writer = csv.DictWriter(handle, fieldnames=columns, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -297,6 +297,10 @@ No bootstrap significance test is included. These results must not be described 
 ## Validation
 
 Every variant passed exact sample-set, unique-key, variant-label, and raw prompt-mask validation. Invalid model outputs remain empty predictions in the {len(expected_ids)}-sample denominator. Machine-readable files in this directory contain overall/single/multi metrics and the full input audit.
+
+The only invalid output is `scene4_room1::32` under `no_gaze_hand`: the model returned six values per point (`point_entry_0_wrong_dimension`). It is retained as an empty prediction in the 4,000-sample denominator and was not manually repaired.
+
+Compact sample-level exports under `paper_experiment_evidence/ablation/experiment3_qwen30b/` merge GT, parsed point hypotheses, and evaluator detail without including model prompts or raw response text. Their hashes and run settings are recorded in `compact_evidence_validation.json` and `run_provenance.csv`.
 """
     (report_dir / "EXPERIMENT3_QWEN30B_ABLATION.md").write_text(report, encoding="utf-8")
     print(json.dumps({"variants": len(VARIANTS), "samples": len(expected_ids), "report_dir": str(report_dir)}))

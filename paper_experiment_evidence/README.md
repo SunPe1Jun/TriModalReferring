@@ -16,6 +16,6 @@ Qwen3-VL-8B Exp.1's paper run is `qwen8/outputs/exam1_qwen3vl8b_baseline`, reeva
 
 ## Ablations and limits
 
-The Exp.1/Exp.2 ablations are descriptive hybrid/input/preprocessing/prompt ablations, not strict single-modality causal ablations. No bootstrap samples exist beyond the header-only file, so no p-value, significance, or confidence interval is reported.
+The Exp.1/Exp.2 ablations are descriptive hybrid/input/preprocessing/prompt ablations, not strict single-modality causal ablations. Experiment 3 additionally contains five Qwen3-VL-30B post-selection input ablations under `ablation/experiment3_qwen30b/`. Its frozen frame selector used gaze/hand signals before masking, and the prompt explicitly exposes copyable gaze hypotheses, so these results are also descriptive rather than strict causal modality estimates. No bootstrap samples exist beyond the header-only file, so no p-value, significance, or confidence interval is reported.
 
 The explicit location/region taxonomy contains 37 canonical anchors and identifies 1372 interactions. The old 1,461 count is not reproducible because no committed taxonomy supported it; it must not be cited.

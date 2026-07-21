@@ -1,7 +1,6 @@
 # VR-TriRef Modality Ablation Results
 
-This report covers ablations for the two established experiments only.
-Experiment 3 is excluded from this round.
+This report covers the completed descriptive ablations for all three experiments.
 
 ## Experiment 1
 
@@ -47,3 +46,22 @@ Baseline is reused from `exam2/outputs_qwen3vl30b_2d_point_hybrid_v10/`. Manifes
 - Experiment 2 runner: `ablation/exam2/run_exam2_ablation.sh`
 - Parallel smoke: `ablation/run_parallel_smoke.sh`
 - Parallel full run: `ablation/run_parallel_full.sh`
+
+## Experiment 3
+
+Experiment 3 uses the frozen v9 candidate-free measured point-hypothesis protocol. All variants share the same 4,000 samples, selected evidence frames, checkpoint, parser, greedy decoding, and evaluator; only model-visible fields are masked after frame selection.
+
+| Variant | Valid | Anchor F1 | Delta F1 | Exact | Margin-F1@1.0 | Margin-F1@2.0 | Scene-normalized error |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| full | 4000 | 0.4326 | 0.0000 | 0.0185 | 0.2503 | 0.4105 | 0.1569 |
+| no_visual | 4000 | 0.4341 | +0.0014 | 0.0180 | 0.2518 | 0.4120 | 0.1560 |
+| no_gaze | 4000 | 0.0673 | -0.3653 | 0.0013 | 0.0055 | 0.0263 | 0.3771 |
+| no_hand | 4000 | 0.4353 | +0.0027 | 0.0187 | 0.2527 | 0.4134 | 0.1558 |
+| no_gaze_hand | 3999 | 0.0542 | -0.3784 | 0.0000 | 0.0000 | 0.0037 | 0.5376 |
+| no_instruction | 4000 | 0.4332 | +0.0006 | 0.0177 | 0.2510 | 0.4111 | 0.1565 |
+
+The result is dominated by exposed copyable gaze hypotheses: removing gaze causes a large degradation, whereas removing visual input, hand telemetry, or event instruction barely changes predictions. Since the target-free selector itself used gaze/hand availability, these are descriptive post-selection input ablations rather than strict causal modality interventions.
+
+- Experiment 3 runner: `ablation/exam3/run_parallel_full.sh`
+- Unified report: `ablation/exam3/reports/full_v3/EXPERIMENT3_QWEN30B_ABLATION.md`
+- Compact evidence: `paper_experiment_evidence/ablation/experiment3_qwen30b/`
