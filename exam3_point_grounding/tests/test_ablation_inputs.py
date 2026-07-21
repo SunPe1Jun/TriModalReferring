@@ -13,7 +13,7 @@ TEMPLATE = (ROOT / "exam3_point_grounding/prompts/qwen3vl_point_grounding.md").r
 
 
 def test_variant_prompts_have_no_unfilled_blocks():
-    for variant in ("no_visual", "no_gaze", "no_hand", "no_gaze_hand", "no_instruction"):
+    for variant in ("no_visual", "no_gaze", "no_hand", "no_hand_strict", "no_gaze_hand", "no_instruction"):
         prompt = render_prompt(TEMPLATE, MANIFEST_ROW, variant)
         assert "[EVENT_BLOCK]" not in prompt
         assert "[SCENE_BOUNDS_BLOCK]" not in prompt
@@ -38,12 +38,13 @@ def test_no_gaze_removes_all_gaze_values():
 
 
 def test_no_hand_removes_all_hand_values():
-    prompt = render_prompt(TEMPLATE, MANIFEST_ROW, "no_hand")
-    assert "hand_hit_world_ray_endpoint:" not in prompt
-    assert "hand_origin_world:" not in prompt
-    assert "hand_direction_world_unit_vector_do_not_copy:" not in prompt
-    assert not audit_prompt(prompt, "no_hand")["has_hand_payload"]
-    assert audit_prompt(prompt, "no_hand")["has_gaze_payload"]
+    for variant in ("no_hand", "no_hand_strict"):
+        prompt = render_prompt(TEMPLATE, MANIFEST_ROW, variant)
+        assert "hand_hit_world_ray_endpoint:" not in prompt
+        assert "hand_origin_world:" not in prompt
+        assert "hand_direction_world_unit_vector_do_not_copy:" not in prompt
+        assert not audit_prompt(prompt, variant)["has_hand_payload"]
+        assert audit_prompt(prompt, variant)["has_gaze_payload"]
 
 
 def test_no_gaze_hand_removes_both_behavioral_payloads():
@@ -62,7 +63,7 @@ def test_no_instruction_removes_language_value():
 
 def test_renderer_preserves_all_unmasked_lines_verbatim():
     source = MANIFEST_ROW["prompt_text"].strip()
-    for variant in ("no_gaze", "no_hand", "no_gaze_hand", "no_instruction"):
+    for variant in ("no_gaze", "no_hand", "no_hand_strict", "no_gaze_hand", "no_instruction"):
         rendered = render_prompt(TEMPLATE, MANIFEST_ROW, variant)
         cursor = 0
         for character in rendered:

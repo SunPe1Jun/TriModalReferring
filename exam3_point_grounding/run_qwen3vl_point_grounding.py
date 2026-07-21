@@ -18,6 +18,7 @@ if __package__ in (None, ""):
 from point_grounding_common import load_qwen_module, normalize_text, parse_int, read_csv_rows, write_csv, write_json  # noqa: E402
 from point_parser import parse_points_3d_output  # noqa: E402
 from ablation_inputs import ABLATION_VARIANTS, audit_prompt, frame_paths as ablation_frame_paths, render_prompt  # noqa: E402
+from hand_masking import prepare_row_hand_masks  # noqa: E402
 
 
 OUTPUT_COLUMNS = (
@@ -58,6 +59,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--continue_on_error", action="store_true")
     parser.add_argument("--flush_every", type=int, default=25, help="Write the prediction CSV every N processed samples; <=0 only writes at the end.")
     parser.add_argument("--ablation_variant", choices=("full",) + ABLATION_VARIANTS, default="full")
+    parser.add_argument("--hand_mask_root", default="ablation/exam3/hand_masked_frames_v1")
+    parser.add_argument("--overwrite_hand_masks", action="store_true")
     parser.add_argument("--prompt_template", default="exam3_point_grounding/prompts/qwen3vl_point_grounding.md")
     return parser.parse_args()
 
@@ -214,7 +217,14 @@ def main() -> None:
         raw_path = output_json_dir / f"{scene}_row_{row_index}.json"
         variant = args.ablation_variant
         prompt_text = normalize_text(row.get("prompt_text")) if variant == "full" else render_prompt(prompt_template, row, variant)
-        selected_frame_paths = frame_paths_from_row(row) if variant == "full" else ablation_frame_paths(row, variant)
+        source_frame_paths = frame_paths_from_row(row) if variant == "full" else ablation_frame_paths(row, variant)
+        hand_mask_audit: List[Dict[str, Any]] = []
+        if variant == "no_hand_strict":
+            selected_frame_paths, hand_mask_audit = prepare_row_hand_masks(
+                row, repo_root / args.hand_mask_root, overwrite=args.overwrite_hand_masks
+            )
+        else:
+            selected_frame_paths = source_frame_paths
         try:
             if raw_path.exists() and not args.overwrite:
                 payload = json.loads(raw_path.read_text(encoding="utf-8"))
@@ -228,8 +238,10 @@ def main() -> None:
                     "event_id": normalize_text(row.get("event_id")),
                     "prompt_text": prompt_text,
                     "frame_paths": [str(path) for path in selected_frame_paths],
+                    "source_frame_paths": [str(path) for path in source_frame_paths],
                     "ablation_variant": variant,
                     "prompt_audit": audit_prompt(prompt_text, variant),
+                    "hand_mask_audit": hand_mask_audit,
                     "model_raw_output": raw_output,
                     "parsed_json": parsed,
                     "parse_ok": parse_ok,
@@ -246,8 +258,10 @@ def main() -> None:
                 "event_id": normalize_text(row.get("event_id")),
                 "prompt_text": prompt_text,
                 "frame_paths": [str(path) for path in selected_frame_paths],
+                "source_frame_paths": [str(path) for path in source_frame_paths],
                 "ablation_variant": variant,
                 "prompt_audit": audit_prompt(prompt_text, variant),
+                "hand_mask_audit": hand_mask_audit,
                 "model_raw_output": "",
                 "parsed_json": {"points_3d": []},
                 "parse_ok": False,

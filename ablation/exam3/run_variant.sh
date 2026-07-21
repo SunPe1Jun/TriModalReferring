@@ -7,10 +7,11 @@ MODEL_NAME="${MODEL_NAME:-/workspace/usr3/Qwen3-VL-30B-A3B-Instruct}"
 MANIFEST="${MANIFEST:-exam3_point_grounding/outputs_full_v9_20260709/manifest.csv}"
 GT_MANIFEST="${GT_MANIFEST:-exam3_point_grounding/outputs_full_v9_20260709/gt_manifest_eval.csv}"
 OUTPUT_ROOT="${OUTPUT_ROOT:-ablation/exam3/outputs_qwen3vl30b_v9_input_mask_v3_full}"
-VARIANT="${VARIANT:?Set VARIANT to no_visual, no_gaze, no_hand, no_gaze_hand, or no_instruction}"
+VARIANT="${VARIANT:?Set VARIANT to no_visual, no_gaze, no_hand, no_hand_strict, no_gaze_hand, or no_instruction}"
 CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0}"
 MAX_NEW_TOKENS="${MAX_NEW_TOKENS:-512}"
 DTYPE="${DTYPE:-auto}"
+HAND_MASK_ROOT="${HAND_MASK_ROOT:-ablation/exam3/hand_masked_frames_v1}"
 LOCAL_FILES_ONLY="${LOCAL_FILES_ONLY:-1}"
 SAMPLE_KEYS_FILE="${SAMPLE_KEYS_FILE:-}"
 OVERWRITE_INFERENCE="${OVERWRITE_INFERENCE:-0}"
@@ -18,7 +19,7 @@ RUN_QWEN="${RUN_QWEN:-1}"
 RUN_EVAL="${RUN_EVAL:-1}"
 
 case "${VARIANT}" in
-  no_visual|no_gaze|no_hand|no_gaze_hand|no_instruction) ;;
+  no_visual|no_gaze|no_hand|no_hand_strict|no_gaze_hand|no_instruction) ;;
   *) echo "Unsupported VARIANT=${VARIANT}" >&2; exit 2 ;;
 esac
 
@@ -63,6 +64,7 @@ printf '%s\n' \
   "dtype=${DTYPE}" \
   "do_sample=false" \
   "prompt_template=exam3_point_grounding/prompts/qwen3vl_point_grounding.md" \
+  "hand_mask_root=${HAND_MASK_ROOT}" \
   > "${OUTPUT_DIR}/run_config.txt"
 
 if [[ "${RUN_QWEN}" == "1" ]]; then
@@ -75,6 +77,7 @@ if [[ "${RUN_QWEN}" == "1" ]]; then
     --dtype "${DTYPE}" \
     --max_new_tokens "${MAX_NEW_TOKENS}" \
     --ablation_variant "${VARIANT}" \
+    --hand_mask_root "${HAND_MASK_ROOT}" \
     --flush_every 10 \
     --continue_on_error \
     "${local_args[@]}" \

@@ -7,6 +7,7 @@ This workflow evaluates controlled model-input ablations for the frozen v9 candi
 - `no_visual`
 - `no_gaze`
 - `no_hand`
+- `no_hand_strict`
 - `no_gaze_hand`
 - `no_instruction`
 
@@ -58,3 +59,16 @@ Export compact sample-level evidence without changing raw outputs:
 ```bash
 python ablation/exam3/export_compact_evidence.py
 ```
+
+## Strict Hand-Input Ablation
+
+The earlier `no_hand` condition removes structured hand fields only. The separate `no_hand_strict` condition also projects tracked left/right hand joints into each frozen evidence panel and replaces the expanded hand regions with a neutral fill before inference. It preserves the original panel selection, panel count, image size, prompt template, decoding, parser, and evaluator. It is a strict **model-input** hand ablation after frame selection, not a strict intervention on the hand-aware frame selector.
+
+Run the two-GPU full workflow with SSH-safe detachment:
+
+```bash
+setsid bash ablation/exam3/run_strict_hand_full.sh \
+  > ablation/exam3/logs/strict_hand_full_launcher.log 2>&1 < /dev/null &
+```
+
+The mask geometry and per-panel coverage audit are stored under `ablation/exam3/hand_masked_frames_v1_full_audit.json`; raw model outputs remain in the strict run output directory and are separate from the earlier descriptive ablation.

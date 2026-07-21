@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Tuple
 
 
-VARIANTS = ("no_visual", "no_gaze", "no_hand", "no_gaze_hand", "no_instruction")
+DEFAULT_VARIANTS = ("no_visual", "no_gaze", "no_hand", "no_gaze_hand", "no_instruction")
 
 
 def read_csv(path: Path) -> List[Dict[str, str]]:
@@ -61,7 +61,7 @@ def expected_audit(variant: str) -> Dict[str, bool]:
         "uses_images": variant != "no_visual",
         "has_visual_path": variant != "no_visual",
         "has_gaze_payload": variant not in {"no_gaze", "no_gaze_hand"},
-        "has_hand_payload": variant not in {"no_hand", "no_gaze_hand"},
+        "has_hand_payload": variant not in {"no_hand", "no_hand_strict", "no_gaze_hand"},
         "has_instruction_value": variant != "no_instruction",
         "contains_nan_or_inf": False,
     }
@@ -88,6 +88,15 @@ def validate_raw_prompts(pred_rows: List[Mapping[str, str]], variant: str, repo_
             failures.append(f"{key(row)}:raw_variant_mismatch")
         if variant == "no_visual" and payload.get("frame_paths"):
             failures.append(f"{key(row)}:visual_frames_present")
+        if variant == "no_hand_strict":
+            mask_audit = payload.get("hand_mask_audit")
+            frame_paths = payload.get("frame_paths")
+            if not isinstance(mask_audit, list) or not isinstance(frame_paths, list) or len(mask_audit) != len(frame_paths):
+                failures.append(f"{key(row)}:missing_hand_mask_audit")
+            elif any(item.get("status") not in {"masked", "no_tracked_hand", "tracked_offscreen"} for item in mask_audit):
+                failures.append(f"{key(row)}:invalid_hand_mask_status")
+            elif any("hand_masked_frames_v1" not in str(path) for path in frame_paths):
+                failures.append(f"{key(row)}:unmasked_frame_path")
         for field, expected_value in expected.items():
             if bool(audit.get(field)) != expected_value:
                 failures.append(f"{key(row)}:{field}={audit.get(field)!r}")
@@ -143,11 +152,13 @@ def main() -> None:
     parser.add_argument("--output_root", required=True)
     parser.add_argument("--expected_gt", required=True)
     parser.add_argument("--report_dir", required=True)
+    parser.add_argument("--variants", nargs="+", default=list(DEFAULT_VARIANTS))
     args = parser.parse_args()
 
     repo_root = Path(args.repo_root).resolve()
     output_root = (repo_root / args.output_root).resolve()
     report_dir = (repo_root / args.report_dir).resolve()
+    variants = tuple(args.variants)
     gt_rows = read_csv((repo_root / args.expected_gt).resolve())
     expected_ids = {key(row) for row in gt_rows}
     baseline_pred_path = repo_root / "exam3_point_grounding/outputs_full_v9_20260709/qwen3vl30b/predictions.csv"
@@ -163,12 +174,17 @@ def main() -> None:
     validation_rows: List[Dict[str, Any]] = []
     prompt_audit: Dict[str, Any] = {}
     summaries: Dict[str, Any] = {"full": baseline_summary, "gaze_copy_reference": gaze_copy_summary}
-    for variant in VARIANTS:
+    invalid_examples: List[str] = []
+    for variant in variants:
         pred_path = output_root / variant / "predictions.csv"
         summary_path = output_root / variant / "eval/evaluation_summary.json"
         if not pred_path.exists() or not summary_path.exists():
             raise RuntimeError(f"incomplete variant {variant}: missing predictions or summary")
         predictions = read_csv(pred_path)
+        invalid_examples.extend(
+            f"{variant}:{key(row)}:{row.get('invalid_reason') or 'parse_failure'}"
+            for row in predictions if str(row.get("parse_ok", "")).lower() != "true"
+        )
         summary = read_json(summary_path)
         summaries[variant] = summary
         actual_ids = [key(row) for row in predictions]
@@ -228,7 +244,7 @@ def main() -> None:
 
     overall = {row["variant"]: row for row in metric_rows if row["partition"] == "overall"}
     table_lines = []
-    for variant in ("full", "gaze_copy_reference") + VARIANTS:
+    for variant in ("full", "gaze_copy_reference") + variants:
         item = overall[variant]
         validation = next((row for row in validation_rows if row["variant"] == variant), None)
         table_lines.append(
@@ -241,7 +257,7 @@ def main() -> None:
         )
     partition_lines = []
     partition_lookup = {(row["variant"], row["partition"]): row for row in metric_rows}
-    for variant in ("full", "gaze_copy_reference") + VARIANTS:
+    for variant in ("full", "gaze_copy_reference") + variants:
         for partition in ("single_target", "multi_target"):
             item = partition_lookup[(variant, partition)]
             partition_lines.append(
@@ -256,7 +272,7 @@ def main() -> None:
 
 This is a descriptive model-input ablation of the frozen v9 candidate-free measured point-hypothesis diagnostic. All variants reuse the same evidence-frame selection, GT manifest, model checkpoint, parser, greedy decoding (`do_sample=false`, `max_new_tokens=512`), and evaluator. The current evaluation denominator is {len(expected_ids)} samples. Only model-visible input fields are masked.
 
-Because the frozen target-free frame selector itself used gaze/hand availability and stability, `no_gaze`, `no_hand`, and `no_gaze_hand` do not constitute strict causal single-modality ablations. They remove those fields after panel selection and must be reported as controlled input ablations.
+Because the frozen target-free frame selector itself used gaze/hand availability and stability, `no_gaze`, `no_hand`, and `no_hand_strict` do not constitute strict causal pipeline interventions. `no_hand_strict` is a strict model-input hand ablation: it removes hand fields and masks projected hand regions in every input panel after panel selection.
 
 ## Frozen Baseline
 
@@ -285,6 +301,7 @@ Because the frozen target-free frame selector itself used gaze/hand availability
 - `no_visual`: sends no image tensors and removes image paths from the prompt; language, camera, gaze, and hand telemetry remain.
 - `no_gaze`: removes gaze coordinates, validity, directions, copyable hypotheses, gaze-derived distances, and selection metadata; images, language, camera, and hand remain.
 - `no_hand`: removes hand state, coordinates, directions, copyable hypotheses, hand-derived distances, and selection metadata; images, language, camera, and gaze remain.
+- `no_hand_strict`: removes the same hand fields as `no_hand` and replaces every selected panel with a hand-masked image generated from projected tracked hand joints; panel count and panel selection are unchanged.
 - `no_gaze_hand`: removes both behavioral cue families and their derived metadata; images, language, and camera remain.
 - `no_instruction`: removes instruction and utterance values while retaining the task instruction, images, camera, gaze, and hand.
 
@@ -296,14 +313,14 @@ No bootstrap significance test is included. These results must not be described 
 
 ## Validation
 
-Every variant passed exact sample-set, unique-key, variant-label, and raw prompt-mask validation. Invalid model outputs remain empty predictions in the {len(expected_ids)}-sample denominator. Machine-readable files in this directory contain overall/single/multi metrics and the full input audit.
+Every variant passed exact sample-set, unique-key, variant-label, and raw prompt/mask validation. Invalid model outputs remain empty predictions in the {len(expected_ids)}-sample denominator. Machine-readable files in this directory contain overall/single/multi metrics and the full input audit.
 
-The only invalid output is `scene4_room1::32` under `no_gaze_hand`: the model returned six values per point (`point_entry_0_wrong_dimension`). It is retained as an empty prediction in the 4,000-sample denominator and was not manually repaired.
+Invalid outputs: {"; ".join(invalid_examples) if invalid_examples else "none"}. They are retained as empty predictions and were not manually repaired.
 
 Compact sample-level exports under `paper_experiment_evidence/ablation/experiment3_qwen30b/` merge GT, parsed point hypotheses, and evaluator detail without including model prompts or raw response text. Their hashes and run settings are recorded in `compact_evidence_validation.json` and `run_provenance.csv`.
 """
     (report_dir / "EXPERIMENT3_QWEN30B_ABLATION.md").write_text(report, encoding="utf-8")
-    print(json.dumps({"variants": len(VARIANTS), "samples": len(expected_ids), "report_dir": str(report_dir)}))
+    print(json.dumps({"variants": len(variants), "samples": len(expected_ids), "report_dir": str(report_dir)}))
 
 
 if __name__ == "__main__":

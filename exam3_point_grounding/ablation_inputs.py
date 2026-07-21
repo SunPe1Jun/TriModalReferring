@@ -15,6 +15,7 @@ ABLATION_VARIANTS = (
     "no_visual",
     "no_gaze",
     "no_hand",
+    "no_hand_strict",
     "no_gaze_hand",
     "no_instruction",
 )
@@ -42,7 +43,7 @@ def render_prompt(template: str, row: Mapping[str, str], variant: str) -> str:
         raise ValueError("manifest row has no frozen prompt_text")
 
     remove_gaze = variant in {"no_gaze", "no_gaze_hand"}
-    remove_hand = variant in {"no_hand", "no_gaze_hand"}
+    remove_hand = variant in {"no_hand", "no_hand_strict", "no_gaze_hand"}
     prompt = source
     if variant == "no_instruction":
         prompt = re.sub(r"instruction_text:.*?(?=utterance_text:|Scene bounds:)", "", prompt)
