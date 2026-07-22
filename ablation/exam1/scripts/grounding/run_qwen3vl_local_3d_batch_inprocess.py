@@ -44,6 +44,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--offload_folder")
     parser.add_argument("--overwrite", action="store_true")
     parser.add_argument("--continue_on_error", action="store_true")
+    parser.add_argument(
+        "--strict_hand_visual",
+        action="store_true",
+        help="Mask projected tracked hand joints in every video frame before processor input.",
+    )
+    parser.add_argument(
+        "--video_time_offset_manifest",
+        help="Optional Exp2 manifest used to map video timestamps to telemetry sample timestamps.",
+    )
     return parser.parse_args()
 
 
@@ -112,6 +121,8 @@ def build_error_payload(
         "prompt_style": args.prompt_style,
         "prompt_strategy": args.prompt_strategy,
         "ablate_modalities": sorted(api3d.parse_ablation_modalities(args.ablate_modalities)),
+        "strict_hand_visual": bool(args.strict_hand_visual),
+        "video_time_offset_manifest": args.video_time_offset_manifest or "",
         "prompt_text": "",
         "response_text": "",
         "parsed_response": None,
@@ -144,6 +155,8 @@ def run_one_row(
     anchor_rows: List[Dict[str, Any]],
     ablation_modalities: Sequence[str],
     output_path: Path,
+    hand_masking: Optional[Any] = None,
+    video_offset_map: Optional[Mapping[str, float]] = None,
 ) -> None:
     video_path_raw = api3d.normalize_text(row.get("video_path"))
     video_path = Path(video_path_raw).expanduser().resolve() if video_path_raw else None
@@ -151,6 +164,26 @@ def run_one_row(
     keyframe_path = Path(keyframe_path_raw).expanduser().resolve() if keyframe_path_raw else Path()
     if video_path is None and not keyframe_path_raw:
         raise Batch3DError("Input row must contain at least video_path or keyframe_path.")
+
+    hand_mask_context: Optional[Dict[str, Any]] = None
+    if args.strict_hand_visual:
+        if hand_masking is None or video_path is None:
+            raise Batch3DError("--strict_hand_visual requires a video and hand masking module.")
+        json_path_raw = api3d.normalize_text(row.get("json_path"))
+        if not json_path_raw:
+            raise Batch3DError("--strict_hand_visual requires json_path in the input row.")
+        timed_samples = hand_masking.collect_timed_samples(
+            hand_masking.load_multimodal_samples(Path(json_path_raw))
+        )
+        video_offset, offset_source = single_event.resolve_video_time_offset(
+            video_path, video_offset_map or {}
+        )
+        hand_mask_context = {
+            "module": hand_masking,
+            "timed_samples": timed_samples,
+            "video_time_offset": video_offset,
+            "video_time_offset_source": offset_source,
+        }
 
     if api3d.modality_disabled(ablation_modalities, "gaze", "timeline", "structured_geometry"):
         sparse_timeline_evidence: List[Dict[str, Any]] = []
@@ -182,6 +215,7 @@ def run_one_row(
         t_end=api3d.normalize_text(row.get("t_end")),
     )
     media_mode = single_event.resolve_media_mode(row, args.input_mode)
+    hand_mask_audit: List[Dict[str, Any]] = []
     if api3d.modality_disabled(ablation_modalities, "visual"):
         media_mode = "image"
         placeholder = runner.runtime.image_module.new("RGB", (64, 64), color=(18, 18, 18))
@@ -198,17 +232,31 @@ def run_one_row(
             placeholder,
         )
     else:
-        model_inputs = local_grounding.build_model_inputs(
-            processor=runner.processor,
-            runtime=runner.runtime,
-            sample=sample,
-            system_prompt=system_prompt,
-            prompt_text=prompt_text,
-            media_mode=media_mode,
-            ffmpeg_path=args.ffmpeg_path,
-            ffprobe_path=args.ffprobe_path,
-            max_video_frames=args.max_video_frames,
-        )
+        if args.strict_hand_visual:
+            model_inputs, hand_mask_audit = single_event.build_strict_hand_video_model_inputs(
+                processor=runner.processor,
+                runtime=runner.runtime,
+                sample=sample,
+                system_prompt=system_prompt,
+                prompt_text=prompt_text,
+                local_grounding=local_grounding,
+                hand_mask_context=hand_mask_context or {},
+                ffmpeg_path=args.ffmpeg_path,
+                ffprobe_path=args.ffprobe_path,
+                max_video_frames=args.max_video_frames,
+            )
+        else:
+            model_inputs = local_grounding.build_model_inputs(
+                processor=runner.processor,
+                runtime=runner.runtime,
+                sample=sample,
+                system_prompt=system_prompt,
+                prompt_text=prompt_text,
+                media_mode=media_mode,
+                ffmpeg_path=args.ffmpeg_path,
+                ffprobe_path=args.ffprobe_path,
+                max_video_frames=args.max_video_frames,
+            )
 
     used_storyboard_fallback = False
     fallback_reason = ""
@@ -236,6 +284,7 @@ def run_one_row(
             ffprobe_path=args.ffprobe_path,
             max_video_frames=args.max_video_frames,
             evidence_times=evidence_times,
+            hand_mask_context=hand_mask_context,
         )
         model_inputs = move_to_device(single_event, storyboard_inputs, runner.device)
         with runner.runtime.torch.inference_mode():
@@ -276,6 +325,10 @@ def run_one_row(
         "prompt_style": args.prompt_style,
         "prompt_strategy": args.prompt_strategy,
         "ablate_modalities": sorted(ablation_modalities),
+        "strict_hand_visual": bool(args.strict_hand_visual),
+        "video_time_offset": hand_mask_context.get("video_time_offset", 0.0) if hand_mask_context else 0.0,
+        "video_time_offset_source": hand_mask_context.get("video_time_offset_source", "") if hand_mask_context else "",
+        "hand_mask_audit": hand_mask_audit if args.strict_hand_visual else [],
         "prompt_text": prompt_text,
         "response_text": response_text,
         "parsed_response": parsed_response,
@@ -307,6 +360,7 @@ def main() -> int:
     single_event = load_single_event_module()
     api3d = single_event.load_api3d_module()
     local_grounding = single_event.load_local_grounding_module()
+    hand_masking = single_event.load_hand_masking_module() if args.strict_hand_visual else None
     single_event.local_grounding_module_ref["module"] = local_grounding
 
     input_csv = Path(args.input_csv).resolve()
@@ -314,6 +368,11 @@ def main() -> int:
     rows = load_rows(input_csv)
     anchor_rows = api3d.load_scene_anchor_table(Path(args.scene_anchor_csv).resolve())
     ablation_modalities = api3d.parse_ablation_modalities(args.ablate_modalities)
+    video_offset_map = (
+        single_event.load_video_offset_map(args.video_time_offset_manifest)
+        if args.strict_hand_visual
+        else {}
+    )
 
     end_index = len(rows) if args.limit is None else min(len(rows), args.start_index + args.limit)
     if args.start_index >= len(rows):
@@ -362,6 +421,8 @@ def main() -> int:
                 anchor_rows=anchor_rows,
                 ablation_modalities=ablation_modalities,
                 output_path=output_path,
+                hand_masking=hand_masking,
+                video_offset_map=video_offset_map,
             )
             ok_count += 1
             print(f"[ok] row {row_index}", flush=True)

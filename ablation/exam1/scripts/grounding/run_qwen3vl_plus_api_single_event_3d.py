@@ -486,7 +486,9 @@ def build_sparse_timeline_evidence(
     return selected
 
 
-def format_sparse_timeline_evidence(evidence_segments: List[Dict[str, Any]]) -> str:
+def format_sparse_timeline_evidence(
+    evidence_segments: List[Dict[str, Any]], include_hand: bool = True
+) -> str:
     if not evidence_segments:
         return (
             "No sparse eye-cue proposal segments passed the validity filter. "
@@ -499,12 +501,16 @@ def format_sparse_timeline_evidence(evidence_segments: List[Dict[str, Any]]) -> 
         "Nearest anchors are geometric candidates, not ground-truth labels."
     )
     for segment in evidence_segments:
+        hand_suffix = (
+            f", right_hand_hit_frames={segment['right_hand_hit_frames']}"
+            if include_hand
+            else ""
+        )
         lines.append(
             f"{segment['segment_id']}: {float(segment['start_time']):.2f}-{float(segment['end_time']):.2f}s "
             f"(representative_time={float(segment['representative_time']):.2f}s, "
-            f"valid_gaze_frames={segment['valid_gaze_frames']}, "
-            f"right_hand_hit_frames={segment['right_hand_hit_frames']}, "
-            f"cue_confidence={segment.get('cue_confidence', 'proposal_only')})"
+            f"valid_gaze_frames={segment['valid_gaze_frames']}"
+            f"{hand_suffix}, cue_confidence={segment.get('cue_confidence', 'proposal_only')})"
         )
         lines.append(f"  inclusion_reason: {segment['reason_for_inclusion']}")
         eye_cues = segment.get("representative_eye_cues", [])
@@ -683,8 +689,14 @@ def build_mention_first_3d_object_prompt(
         ]
     if modality_disabled(disabled_modalities, "hand"):
         hand_evidence_line = "- Hand cues are hidden for this ablation; do not cite hand evidence."
+        hand_geometry_line = "- cameraHitPoint is noisy and must not be a primary source."
+        hand_summary_block = ""
+        selection_reason_sources = "language, visual/storyboard, eye_cue/gaze, or 3D spatial context"
     else:
         hand_evidence_line = "- hand_summary is weak auxiliary context only."
+        hand_geometry_line = "- rightIndexFingerRayHitPoint and cameraHitPoint are noisy and must not be primary sources."
+        hand_summary_block = f"hand_summary: {hand_summary} (weak auxiliary description only)"
+        selection_reason_sources = "language, visual/storyboard, eye_cue/gaze, 3D spatial context, or hand cue"
     evidence_use_text = "\n".join(
         [
             f"- {style_note}",
@@ -693,7 +705,7 @@ def build_mention_first_3d_object_prompt(
             "- If same-class candidates cannot be disambiguated, return no match for that ambiguous mention instead of guessing a numbered instance.",
             "- Visual evidence can reject a candidate if it is clearly inconsistent with the scene.",
             hand_evidence_line,
-            "- rightIndexFingerRayHitPoint and cameraHitPoint are noisy and must not be primary sources.",
+            hand_geometry_line,
         ]
     )
 
@@ -729,7 +741,7 @@ Evidence use:
 
 Candidate matching rules:
 - For each mention, candidate_reasoning must compare plausible candidates before giving matched_object_names.
-- selection_reason must name the evidence actually used: language, visual/storyboard, eye_cue/gaze, 3D spatial context, or hand cue.
+- selection_reason must name the evidence actually used: {selection_reason_sources}.
 - For category/group mentions, candidate_reasoning must state whether the phrase is the actual target group or only a locator for another target.
 - For actor/control-subject mentions with multiple same-class candidates, candidate_reasoning must state why the selected instance is identified; otherwise matched_object_names must be [].
 - selected_object_names must equal the union of all non-empty matched_object_names from referent_mentions.
@@ -746,7 +758,7 @@ target_description: {target_description}
 
 Compressed event summaries:
 gaze_summary: {gaze_summary}
-hand_summary: {hand_summary} (weak auxiliary description only)
+{hand_summary_block}
 
 Reference-moment world-coordinate cues:
 gazePoint: {format_xyz(peak_data.get("gaze_point"))}
@@ -775,7 +787,7 @@ Return JSON with this schema:
       "mention_type": "single|multiple|category|spatial|unknown",
       "candidate_reasoning": "brief comparison of plausible candidate labels, especially same-class instances",
       "matched_object_names": ["candidate_label"],
-      "selection_reason": "brief reason naming language, visual/storyboard, eye_cue/gaze, 3D spatial context, or hand cue evidence"
+      "selection_reason": "brief reason naming one available evidence source"
     }}
   ],
   "selected_object_name": "rank_1_candidate_or_empty",
@@ -836,7 +848,10 @@ def build_3d_object_prompt(
             max_segments=max_evidence_segments,
             segment_duration=evidence_segment_duration,
         )
-        timeline_evidence_text = format_sparse_timeline_evidence(timeline_evidence)
+        timeline_evidence_text = format_sparse_timeline_evidence(
+            timeline_evidence,
+            include_hand=not modality_disabled(disabled_modalities, "hand"),
+        )
     if modality_disabled(disabled_modalities, "visual"):
         style_note = "The visual video is hidden; do not infer from the placeholder image."
     else:
@@ -858,12 +873,14 @@ def build_3d_object_prompt(
         hard_gaze_text = "- When the green gaze marker is clearly visible, prioritize it over all other cues.\n- Select the object indicated by the green gaze marker, not a merely salient object unsupported by the gaze marker.\n- If the green marker falls slightly off the object but clearly refers to a nearby object, still choose the nearby object supported by the marker.\n- If gaze is usable, choose primary_source = \"gazePoint\"."
     if modality_disabled(disabled_modalities, "hand"):
         hand_marker_text = "- Hand/gesture cues are hidden for this ablation."
-        hand_summary_text = "- hand_summary is hidden for this ablation."
-        hand_aux_text = "- Do not use the virtual hand or hand_summary as evidence in this ablation."
+        hand_geometry_text = "- Hand-ray geometry is hidden for this ablation."
+        hand_candidate_text = "- Hand-derived summaries and visual hand regions are unavailable in this ablation."
+        hand_summary_block = ""
     else:
         hand_marker_text = "- A translucent virtual right hand is the visualized hand/gesture cue.\n- It is only a weak auxiliary disambiguation cue.\n- Do not use the hand as the primary source."
-        hand_summary_text = "{hand_summary_text}"
-        hand_aux_text = "{hand_aux_text}"
+        hand_geometry_text = "- rightIndexFingerRayHitPoint is noisy and must not be used as the primary source"
+        hand_candidate_text = "- hand_summary and the virtual hand are weak auxiliary context only; they cannot become the primary source."
+        hand_summary_block = f"hand_summary: {hand_summary} (weak auxiliary description only, not a valid primary source)"
 
     return f'''You are doing multimodal 3D referent object selection for one VR interaction event.
 
@@ -901,7 +918,7 @@ Visual marker definitions in the uploaded video:
 Geometric source rules:
 - gazePoint is the only trusted geometric source
 - gazePoint is a 3D world cue
-- rightIndexFingerRayHitPoint is noisy and must not be used as the primary source
+{hand_geometry_text}
 - cameraHitPoint must not be used as a grounding source
 - no trusted explicit 2D prior is provided
 
@@ -914,8 +931,7 @@ Candidate object rules:
 - selected_object_name is a compatibility field: set it to the rank-1 object, or "" when no referent exists.
 - If a candidate line lists aliases, those aliases are only alternative names for the same object; output the canonical label before the colon, not the alias.
 - For entity referents, choose all candidate objects whose visible objects match the green gaze marker, language semantics, or explicit plural/multi-object instruction.
-- hand_summary only provides weak auxiliary context.
-- The virtual hand may help disambiguate between multiple nearby gaze-consistent objects, but it cannot become the primary source.
+{hand_candidate_text}
 - Sparse eye-cue proposals are computed before this prompt from valid gazePoint samples, gaze vectors, and scene-anchor proximity over the full event window.
 - Use sparse eye-cue proposals to recover additional referents that may appear at different times, but do not treat nearest anchor candidates as automatic labels.
 
@@ -938,7 +954,7 @@ target_description: {target_description}
 
 Compressed event summaries:
 gaze_summary: {gaze_summary}
-hand_summary: {hand_summary} (weak auxiliary description only, not a valid primary source)
+{hand_summary_block}
 
 Reference-moment world-coordinate cues:
 gazePoint: {format_xyz(peak_data.get("gaze_point"))}

@@ -59,6 +59,9 @@ variant_env() {
     no_gaze)
       printf '%s\n' 'PROMPT_MODE=expected_count PANEL_CONTEXT_MODE=full ABLATE_MODALITIES=gaze'
       ;;
+    no_hand_strict)
+      printf '%s\n' 'PROMPT_MODE=expected_count PANEL_CONTEXT_MODE=full ABLATE_MODALITIES=hand_visual'
+      ;;
     instruction_only_prompt)
       printf '%s\n' 'PROMPT_MODE=instruction_only PANEL_CONTEXT_MODE=paired_crop ABLATE_MODALITIES='
       ;;

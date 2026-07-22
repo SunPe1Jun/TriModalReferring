@@ -22,6 +22,11 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, 
 from PIL import Image, ImageDraw, ImageFont
 
 
+REPO_ROOT_FOR_HAND_MASK = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(REPO_ROOT_FOR_HAND_MASK / "exam3_point_grounding"))
+from hand_masking import collect_timed_samples, load_multimodal_samples, mask_pil_image, nearest_sample  # noqa: E402
+
+
 OUTPUT_COLUMNS = (
     "scene",
     "row_index",
@@ -44,7 +49,7 @@ SYSTEM_PROMPT = (
     "and output one normalized 2D point per referent inside that selected panel. "
     "Return strict JSON only, with no markdown and no commentary."
 )
-ALLOWED_ABLATION_MODALITIES = {"gaze_text", "gaze_marker", "visual"}
+ALLOWED_ABLATION_MODALITIES = {"gaze_text", "gaze_marker", "visual", "hand_visual"}
 
 
 def parse_args() -> argparse.Namespace:
@@ -111,7 +116,7 @@ def parse_args() -> argparse.Namespace:
         "--ablate_modalities",
         default="",
         help=(
-            "Comma-separated prompt/image modalities to hide: gaze_text,gaze_marker,visual. "
+            "Comma-separated prompt/image modalities to hide: gaze_text,gaze_marker,visual,hand_visual. "
             "Alias gaze hides both gaze_text and gaze_marker. Default: none."
         ),
     )
@@ -147,6 +152,10 @@ def parse_ablation_modalities(raw_value: Any) -> Set[str]:
         "image": "visual",
         "images": "visual",
         "panels": "visual",
+        "hand": "hand_visual",
+        "hands": "hand_visual",
+        "gesture": "hand_visual",
+        "hand_mask": "hand_visual",
     }
     result: Set[str] = set()
     for raw_item in [item for item in text.replace(";", ",").split(",") if item.strip()]:
@@ -242,11 +251,12 @@ def prepare_ablation_panel_images(
     args: argparse.Namespace,
     disabled_modalities: Sequence[str] | Set[str],
 ) -> Tuple[List[Path], List[Dict[str, str]]]:
-    if not modality_disabled(disabled_modalities, "gaze_marker", "visual"):
+    if not modality_disabled(disabled_modalities, "gaze_marker", "visual", "hand_visual"):
         return list(image_paths), [dict(item) for item in panel_meta]
     scene, row_index = key
     prepared_paths: List[Path] = []
     prepared_meta: List[Dict[str, str]] = []
+    sample_cache: Dict[str, List[Tuple[float, Mapping[str, Any]]]] = {}
     for image_path, meta in zip(image_paths, panel_meta):
         panel_id = normalize_text(meta.get("panel_id")) or f"P{len(prepared_paths) + 1}"
         updated = dict(meta)
@@ -255,19 +265,44 @@ def prepare_ablation_panel_images(
             prepared_path = create_blank_panel_image(image_path, output_path, args.overwrite)
             updated["image_role"] = "blank_visual"
         else:
-            output_path = model_input_dir / "gaze_masked" / scene / f"row_{row_index}" / f"{panel_id}.jpg"
-            gaze_u = parse_float(meta.get("gaze_u_norm")) if normalize_text(meta.get("gaze_projection_valid")) == "True" else None
-            gaze_v = parse_float(meta.get("gaze_v_norm")) if normalize_text(meta.get("gaze_projection_valid")) == "True" else None
-            prepared_path = create_gaze_masked_image(
-                image_path,
-                output_path,
-                gaze_u,
-                gaze_v,
-                float(args.gaze_mask_radius_ratio),
-                args.overwrite,
-            )
+            prepared_path = image_path
+            if modality_disabled(disabled_modalities, "hand_visual"):
+                json_path = normalize_text(meta.get("json_path"))
+                if not json_path:
+                    raise RuntimeError(f"Missing json_path for hand masking: {scene} row_{row_index} {panel_id}")
+                if json_path not in sample_cache:
+                    sample_cache[json_path] = collect_timed_samples(load_multimodal_samples(Path(json_path)))
+                target_time = parse_float(meta.get("json_sample_time"))
+                if target_time is None:
+                    raise RuntimeError(f"Missing json_sample_time for hand masking: {scene} row_{row_index} {panel_id}")
+                nearest_time, telemetry_sample = nearest_sample(sample_cache[json_path], target_time)
+                output_path = model_input_dir / "hand_masked" / scene / f"row_{row_index}" / f"{panel_id}.jpg"
+                if args.overwrite or not output_path.exists():
+                    source_image = Image.open(image_path).convert("RGB")
+                    masked_image, hand_audit = mask_pil_image(source_image, telemetry_sample)
+                    output_path.parent.mkdir(parents=True, exist_ok=True)
+                    masked_image.save(output_path, quality=92)
+                else:
+                    hand_audit = {"status": "reused_existing_mask", "mask_version": "hand_mask_v1"}
+                prepared_path = output_path
+                updated["hand_masked"] = "True"
+                updated["hand_mask_status"] = str(hand_audit.get("status", ""))
+                updated["hand_mask_fraction"] = f"{float(hand_audit.get('mask_fraction', 0.0)):.8f}"
+                updated["hand_mask_nearest_sample_time"] = f"{nearest_time:.6f}"
+            if modality_disabled(disabled_modalities, "gaze_marker"):
+                output_path = model_input_dir / "gaze_masked" / scene / f"row_{row_index}" / f"{panel_id}.jpg"
+                gaze_u = parse_float(updated.get("gaze_u_norm")) if normalize_text(updated.get("gaze_projection_valid")) == "True" else None
+                gaze_v = parse_float(updated.get("gaze_v_norm")) if normalize_text(updated.get("gaze_projection_valid")) == "True" else None
+                prepared_path = create_gaze_masked_image(
+                    prepared_path,
+                    output_path,
+                    gaze_u,
+                    gaze_v,
+                    float(args.gaze_mask_radius_ratio),
+                    args.overwrite,
+                )
+                updated["gaze_marker_masked"] = "True"
             updated["image_role"] = normalize_text(updated.get("image_role")) or "full"
-            updated["gaze_marker_masked"] = "True"
         updated["source_frame_path"] = normalize_text(meta.get("frame_path")) or str(image_path)
         updated["frame_path"] = str(prepared_path)
         prepared_paths.append(prepared_path)
@@ -462,6 +497,7 @@ def collect_model_panels(
                 "gaze_u_norm": normalize_text(row.get("gaze_u_norm")),
                 "gaze_v_norm": normalize_text(row.get("gaze_v_norm")),
                 "gaze_projection_valid": normalize_text(row.get("gaze_projection_valid")),
+                "json_path": normalize_text(row.get("json_path")),
             }
         )
     return image_paths, panel_meta
@@ -1054,6 +1090,8 @@ def main() -> None:
     model_input_dir.mkdir(parents=True, exist_ok=True)
 
     disabled_modalities = parse_ablation_modalities(args.ablate_modalities)
+    if modality_disabled(disabled_modalities, "hand_visual") and args.input_mode != "multi_image":
+        raise SystemExit("hand_visual ablation requires --input_mode multi_image so each frozen panel is masked before composition.")
     system_prompt = build_system_prompt(disabled_modalities)
     manifest_rows = read_csv_rows(manifest_path)
     grouped = group_manifest(manifest_rows)

@@ -50,6 +50,15 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument("--offload_folder", help="Optional directory for Accelerate disk offload when loading very large models or MoE checkpoints.")
+    parser.add_argument(
+        "--strict_hand_visual",
+        action="store_true",
+        help="Mask projected tracked hand joints in every video frame before processor input.",
+    )
+    parser.add_argument(
+        "--video_time_offset_manifest",
+        help="Optional Exp2 manifest used to map video timestamps to telemetry sample timestamps.",
+    )
     return parser.parse_args()
 
 
@@ -71,6 +80,12 @@ def load_api3d_module() -> Any:
 def load_local_grounding_module() -> Any:
     project_root = Path(__file__).resolve().parents[2]
     return load_module("local_grounding_module", project_root / "scripts" / "grounding" / "run_qwen3vl_local_keyframe_grounding.py")
+
+
+def load_hand_masking_module() -> Any:
+    repo_root = Path(__file__).resolve().parents[4]
+    sys.path.insert(0, str(repo_root / "exam3_point_grounding"))
+    return load_module("strict_hand_masking_module", repo_root / "exam3_point_grounding" / "hand_masking.py")
 
 
 def decode_response(processor: Any, generated_ids: Any) -> str:
@@ -257,6 +272,7 @@ def build_storyboard_model_inputs(
     ffprobe_path: Optional[str],
     max_video_frames: int,
     evidence_times: Optional[Sequence[float]] = None,
+    hand_mask_context: Optional[Mapping[str, Any]] = None,
 ) -> Mapping[str, Any]:
     frames = extract_video_frames_at_times(
         video_path=sample.video_path or Path(),
@@ -274,6 +290,13 @@ def build_storyboard_model_inputs(
             t_start=local_grounding_module_ref["module"].parse_time_value(sample.t_start, "t_start"),
             t_end=local_grounding_module_ref["module"].parse_time_value(sample.t_end, "t_end"),
         )
+    if hand_mask_context:
+        frames, _ = mask_frame_sequence(
+            frames,
+            source_times=list(evidence_times or []),
+            sample=sample,
+            hand_mask_context=hand_mask_context,
+        )
     storyboard = build_storyboard_image(frames, runtime)
     storyboard_prompt = build_storyboard_prompt(prompt_text, evidence_times=evidence_times)
     return _build_processor_image_input(processor, runtime, system_prompt, storyboard_prompt, storyboard)
@@ -290,6 +313,124 @@ def _build_processor_image_input(processor: Any, runtime: Any, system_prompt: st
 local_grounding_module_ref: Dict[str, Any] = {}
 
 
+def load_video_offset_map(manifest_path: Optional[str]) -> Dict[str, float]:
+    if not manifest_path:
+        return {}
+    import csv
+
+    path = Path(manifest_path).expanduser().resolve()
+    if not path.exists():
+        raise Local3DError(f"Missing video-time offset manifest: {path}")
+    offsets: Dict[str, float] = {}
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        for row in csv.DictReader(handle):
+            video = str(row.get("video_path") or "").strip()
+            raw_offset = str(row.get("video_time_offset_seconds") or "").strip()
+            if not video or not raw_offset:
+                continue
+            try:
+                offset = float(raw_offset)
+            except ValueError:
+                continue
+            if math.isfinite(offset):
+                offsets.setdefault(str(Path(video).expanduser().resolve()), offset)
+    return offsets
+
+
+def resolve_video_time_offset(video_path: Optional[Path], offset_map: Mapping[str, float]) -> Tuple[float, str]:
+    if video_path is None:
+        return 0.0, "none:no_video"
+    key = str(video_path.expanduser().resolve())
+    if key in offset_map:
+        return float(offset_map[key]), "exp2_manifest"
+    return 0.0, "default_zero:no_manifest_match"
+
+
+def video_frame_times(
+    video_path: Path,
+    local_grounding: Any,
+    ffprobe_path: Optional[str],
+    max_video_frames: int,
+    t_start: Optional[float],
+    t_end: Optional[float],
+    frame_count: int,
+) -> List[float]:
+    duration = local_grounding.probe_video_duration(video_path, ffprobe_path)
+    clip_start = t_start if t_start is not None else 0.0
+    clip_end = t_end
+    if clip_end is None and duration is not None:
+        clip_end = duration
+    clip_duration = None if clip_end is None else max(clip_end - clip_start, 1e-3)
+    fps = min(8.0, max(1.0, max_video_frames / clip_duration)) if clip_duration is not None else 1.0
+    return [clip_start + index / fps for index in range(frame_count)]
+
+
+def mask_frame_sequence(
+    frames: Sequence[Any],
+    source_times: Sequence[float],
+    sample: Any,
+    hand_mask_context: Mapping[str, Any],
+) -> Tuple[List[Any], List[Dict[str, Any]]]:
+    hand_masking = hand_mask_context["module"]
+    timed_samples = hand_mask_context["timed_samples"]
+    video_offset = float(hand_mask_context.get("video_time_offset", 0.0))
+    masked_frames: List[Any] = []
+    audits: List[Dict[str, Any]] = []
+    for index, frame in enumerate(frames):
+        video_time = float(source_times[index]) if index < len(source_times) else float(source_times[-1] if source_times else 0.0)
+        target_sample_time = video_time - video_offset
+        nearest_time, telemetry_sample = hand_masking.nearest_sample(timed_samples, target_sample_time)
+        masked, audit = hand_masking.mask_pil_image(frame, telemetry_sample)
+        audit.update({
+            "frame_index": index,
+            "video_time": video_time,
+            "target_sample_time": target_sample_time,
+            "nearest_sample_time": nearest_time,
+            "sample_time_delta": nearest_time - target_sample_time,
+        })
+        masked_frames.append(masked)
+        audits.append(audit)
+    return masked_frames, audits
+
+
+def build_strict_hand_video_model_inputs(
+    processor: Any,
+    runtime: Any,
+    sample: Any,
+    system_prompt: str,
+    prompt_text: str,
+    local_grounding: Any,
+    hand_mask_context: Mapping[str, Any],
+    ffmpeg_path: Optional[str],
+    ffprobe_path: Optional[str],
+    max_video_frames: int,
+) -> Tuple[Mapping[str, Any], List[Dict[str, Any]]]:
+    frames = local_grounding.load_video_frames(
+        video_path=sample.video_path or Path(),
+        runtime=runtime,
+        ffmpeg_path=ffmpeg_path,
+        ffprobe_path=ffprobe_path,
+        max_video_frames=max_video_frames,
+        t_start=local_grounding.parse_time_value(sample.t_start, "t_start"),
+        t_end=local_grounding.parse_time_value(sample.t_end, "t_end"),
+    )
+    source_times = video_frame_times(
+        sample.video_path or Path(),
+        local_grounding,
+        ffprobe_path,
+        max_video_frames,
+        local_grounding.parse_time_value(sample.t_start, "t_start"),
+        local_grounding.parse_time_value(sample.t_end, "t_end"),
+        len(frames),
+    )
+    masked_frames, audits = mask_frame_sequence(frames, source_times, sample, hand_mask_context)
+    messages = local_grounding.build_messages(system_prompt, prompt_text, "video")
+    if hasattr(processor, "apply_chat_template"):
+        chat_text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+        return processor(text=[chat_text], videos=[masked_frames], return_tensors="pt"), audits
+    return processor(text=[system_prompt + "\n\n" + prompt_text], videos=[masked_frames], return_tensors="pt"), audits
+
+
 def validate_and_adjust_local_3d_response(parsed_response: Optional[Dict[str, Any]], anchor_rows: List[Dict[str, Any]], prompt_style: str, api3d: Any) -> Tuple[Optional[Dict[str, Any]], List[str], Optional[Dict[str, Any]], str]:
     return api3d.validate_and_adjust_3d_response(parsed_response, anchor_rows, prompt_style)
 
@@ -298,6 +439,7 @@ def main() -> None:
     args = parse_args()
     api3d = load_api3d_module()
     local_grounding = load_local_grounding_module()
+    hand_masking = load_hand_masking_module() if args.strict_hand_visual else None
     local_grounding_module_ref["module"] = local_grounding
 
     row = api3d.read_row(Path(args.input_csv), args.row_index)
@@ -312,6 +454,20 @@ def main() -> None:
     keyframe_path = Path(keyframe_path_raw).expanduser().resolve() if keyframe_path_raw else Path()
     if video_path is None and not keyframe_path_raw:
         raise SystemExit("Input row must contain at least video_path or keyframe_path.")
+
+    hand_mask_context: Optional[Dict[str, Any]] = None
+    if args.strict_hand_visual:
+        if video_path is None:
+            raise SystemExit("--strict_hand_visual requires video input.")
+        timed_samples = hand_masking.collect_timed_samples(hand_masking.load_multimodal_samples(Path(row["json_path"])))
+        offset_map = load_video_offset_map(args.video_time_offset_manifest)
+        video_offset, offset_source = resolve_video_time_offset(video_path, offset_map)
+        hand_mask_context = {
+            "module": hand_masking,
+            "timed_samples": timed_samples,
+            "video_time_offset": video_offset,
+            "video_time_offset_source": offset_source,
+        }
 
     if api3d.modality_disabled(ablation_modalities, "gaze", "timeline", "structured_geometry"):
         sparse_timeline_evidence = []
@@ -358,6 +514,7 @@ def main() -> None:
         t_end=api3d.normalize_text(row.get("t_end")),
     )
     media_mode = resolve_media_mode(row, args.input_mode)
+    hand_mask_audit: List[Dict[str, Any]] = []
     if api3d.modality_disabled(ablation_modalities, "visual"):
         media_mode = "image"
         placeholder = runner.runtime.image_module.new("RGB", (64, 64), color=(18, 18, 18))
@@ -374,7 +531,21 @@ def main() -> None:
             placeholder,
         )
     else:
-        model_inputs = local_grounding.build_model_inputs(
+        if args.strict_hand_visual:
+            model_inputs, hand_mask_audit = build_strict_hand_video_model_inputs(
+                processor=runner.processor,
+                runtime=runner.runtime,
+                sample=sample,
+                system_prompt=system_prompt,
+                prompt_text=prompt_text,
+                local_grounding=local_grounding,
+                hand_mask_context=hand_mask_context or {},
+                ffmpeg_path=args.ffmpeg_path,
+                ffprobe_path=args.ffprobe_path,
+                max_video_frames=args.max_video_frames,
+            )
+        else:
+            model_inputs = local_grounding.build_model_inputs(
             processor=runner.processor,
             runtime=runner.runtime,
             sample=sample,
@@ -384,7 +555,7 @@ def main() -> None:
             ffmpeg_path=args.ffmpeg_path,
             ffprobe_path=args.ffprobe_path,
             max_video_frames=args.max_video_frames,
-        )
+            )
     used_storyboard_fallback = False
     fallback_reason = ""
     try:
@@ -411,6 +582,7 @@ def main() -> None:
             ffprobe_path=args.ffprobe_path,
             max_video_frames=args.max_video_frames,
             evidence_times=evidence_times,
+            hand_mask_context=hand_mask_context,
         )
         model_inputs = move_batch_to_device(storyboard_inputs, runner.device)
         with runner.runtime.torch.inference_mode():
@@ -452,6 +624,10 @@ def main() -> None:
         "prompt_style": args.prompt_style,
         "prompt_strategy": args.prompt_strategy,
         "ablate_modalities": sorted(ablation_modalities),
+        "strict_hand_visual": bool(args.strict_hand_visual),
+        "video_time_offset": hand_mask_context.get("video_time_offset", 0.0) if hand_mask_context else 0.0,
+        "video_time_offset_source": hand_mask_context.get("video_time_offset_source", "") if hand_mask_context else "",
+        "hand_mask_audit": hand_mask_audit if args.strict_hand_visual else [],
         "prompt_text": prompt_text,
         "response_text": response_text,
         "parsed_response": parsed_response,

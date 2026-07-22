@@ -35,6 +35,7 @@ MAX_EVIDENCE_SEGMENTS="${MAX_EVIDENCE_SEGMENTS:-0}"
 EVIDENCE_SEGMENT_DURATION="${EVIDENCE_SEGMENT_DURATION:-0.5}"
 LOCAL_FILES_ONLY="${LOCAL_FILES_ONLY:-1}"
 USE_FLASH_ATTN="${USE_FLASH_ATTN:-0}"
+VIDEO_TIME_OFFSET_MANIFEST="${VIDEO_TIME_OFFSET_MANIFEST:-${REPO_ROOT}/exam2/outputs_qwen3vl30b_2d_point_hybrid_v10/manifest/manifest_all.csv}"
 
 mkdir -p "${OUTPUT_ROOT}" "${REPORT_DIR}" "${OFFLOAD_BASE}"
 
@@ -43,6 +44,7 @@ variant_modalities() {
     no_visual) printf '%s\n' 'visual' ;;
     no_gaze) printf '%s\n' 'gaze' ;;
     no_hand) printf '%s\n' 'hand' ;;
+    no_hand_strict) printf '%s\n' 'hand' ;;
     no_gaze_hand) printf '%s\n' 'gaze,hand' ;;
     language_anchors_only) printf '%s\n' 'visual,gaze,hand,structured_geometry,timeline' ;;
     no_structured_geometry) printf '%s\n' 'structured_geometry,timeline' ;;
@@ -94,6 +96,10 @@ run_variant() {
   local variant="$1"
   local modalities
   modalities="$(variant_modalities "${variant}")"
+  local strict_hand_visual=0
+  if [[ "${variant}" == "no_hand_strict" ]]; then
+    strict_hand_visual=1
+  fi
   local variant_root="${OUTPUT_ROOT}/${variant}"
   local pred_root="${variant_root}/predictions"
   local eval_root="${variant_root}/eval"
@@ -131,7 +137,11 @@ run_variant() {
         --max_new_tokens "${MAX_NEW_TOKENS}"
         --offload_folder "${offload_dir}"
         --continue_on_error
+        --video_time_offset_manifest "${VIDEO_TIME_OFFSET_MANIFEST}"
       )
+      if [[ "${strict_hand_visual}" == "1" ]]; then
+        CMD+=(--strict_hand_visual)
+      fi
       if [[ -n "${LIMIT}" ]]; then
         CMD+=(--limit "${LIMIT}")
       fi

@@ -137,8 +137,9 @@ def _tracked_hand_boxes(
     return boxes, tracked_sides
 
 
-def _mask_image(source_path: Path, output_path: Path, sample: Mapping[str, Any]) -> Dict[str, Any]:
-    image = Image.open(source_path).convert("RGB")
+def mask_pil_image(image: Image.Image, sample: Mapping[str, Any]) -> Tuple[Image.Image, Dict[str, Any]]:
+    """Mask projected tracked hand regions in an already-loaded RGB image."""
+    image = image.convert("RGB")
     width, height = image.size
     boxes, tracked_sides = _tracked_hand_boxes(sample, width, height)
     mask = Image.new("L", (width, height), 0)
@@ -152,12 +153,8 @@ def _mask_image(source_path: Path, output_path: Path, sample: Mapping[str, Any])
     mask_fraction = mask_pixels / float(width * height)
     if mask_pixels:
         image.paste(MASK_COLOR, (0, 0, width, height), mask)
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    image.save(output_path, format="JPEG", quality=JPEG_QUALITY, optimize=True)
-    return {
+    audit = {
         "mask_version": MASK_VERSION,
-        "source_path": str(source_path),
-        "masked_path": str(output_path),
         "image_size": [width, height],
         "tracked_sides": tracked_sides,
         "boxes": boxes,
@@ -169,6 +166,16 @@ def _mask_image(source_path: Path, output_path: Path, sample: Mapping[str, Any])
         "jpeg_quality": JPEG_QUALITY,
         "status": "masked" if mask_pixels else ("no_tracked_hand" if not tracked_sides else "tracked_offscreen"),
     }
+    return image, audit
+
+
+def _mask_image(source_path: Path, output_path: Path, sample: Mapping[str, Any]) -> Dict[str, Any]:
+    image = Image.open(source_path).convert("RGB")
+    image, audit = mask_pil_image(image, sample)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    image.save(output_path, format="JPEG", quality=JPEG_QUALITY, optimize=True)
+    audit.update({"source_path": str(source_path), "masked_path": str(output_path)})
+    return audit
 
 
 def prepare_row_hand_masks(
