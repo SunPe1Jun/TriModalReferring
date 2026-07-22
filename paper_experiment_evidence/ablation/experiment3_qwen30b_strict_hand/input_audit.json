@@ -1,0 +1,15 @@
+{
+  "no_hand_strict": {
+    "checked_raw_outputs": 4000,
+    "failure_count": 0,
+    "failure_examples": [],
+    "expected": {
+      "uses_images": true,
+      "has_visual_path": true,
+      "has_gaze_payload": true,
+      "has_hand_payload": false,
+      "has_instruction_value": true,
+      "contains_nan_or_inf": false
+    }
+  }
+}

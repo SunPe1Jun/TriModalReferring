@@ -43,10 +43,11 @@ Measure which input families affect all three experiments, while auditing whethe
 | no_visual | post-selection input | 0.4341 | 0.0180 | 0.2518 | +0.0014 |
 | no_gaze | post-selection input | 0.0673 | 0.0013 | 0.0055 | -0.3653 |
 | no_hand | post-selection input | 0.4353 | 0.0187 | 0.2527 | +0.0027 |
+| no_hand_strict | strict model-input after selection | 0.4351 | 0.0187 | 0.2525 | +0.0025 |
 | no_gaze_hand | post-selection input | 0.0542 | 0.0000 | 0.0000 | -0.3784 |
 | no_instruction | post-selection input | 0.4332 | 0.0177 | 0.2510 | +0.0006 |
 
-All five variants contain the same 4,000 unique sample IDs and GT sets; 20,000 prompt-mask audits pass. `no_gaze_hand` has one invalid output retained as an empty prediction. The frozen frame selector used gaze/hand availability before masking, so these remain descriptive input ablations. The near-invariance of `no_visual`, `no_hand`, and `no_instruction`, together with the sharp `no_gaze` drop, shows that the v9 copy-oriented protocol is dominated by exposed gaze hypotheses.
+All variants contain the same 4,000 unique sample IDs and GT sets. `no_hand_strict` additionally masks in-frame projected hand joints in every frozen panel and has 4,000 valid outputs; 96.92% remain identical to Full. The frozen frame selector used gaze/hand availability before masking, so even this strict model-input control is not an end-to-end causal pipeline intervention. The near-invariance of `no_visual`, both hand controls, and `no_instruction`, together with the sharp `no_gaze` drop, shows that the v9 copy-oriented protocol is dominated by exposed gaze hypotheses.
 
 ## Authoritative Sources
 
@@ -56,3 +57,4 @@ All five variants contain the same 4,000 unique sample IDs and GT sets; 20,000 p
 - `analysis_outputs/ablation_audit/projected2d_ablation_summary.csv`
 - `ablation/exam3/reports/full_v3/EXPERIMENT3_QWEN30B_ABLATION.md`
 - `paper_experiment_evidence/ablation/experiment3_qwen30b/`
+- `paper_experiment_evidence/ablation/experiment3_qwen30b_strict_hand/`

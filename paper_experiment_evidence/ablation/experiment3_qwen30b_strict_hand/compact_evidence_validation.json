@@ -1,0 +1,25 @@
+{
+  "validation_pass": true,
+  "variants": {
+    "no_hand_strict": {
+      "checks": {
+        "row_count_4000": true,
+        "unique_ids_4000": true,
+        "sample_set_matches_gt": true,
+        "raw_prompt_mask_audit_pass": true,
+        "invalid_count_matches_evaluator": true,
+        "anchor_metrics_match_evaluator": true,
+        "exact_rate_matches_evaluator": true,
+        "margin_metrics_match_evaluator": true,
+        "recorded_validation_pass": true
+      },
+      "validation_pass": true,
+      "sample_set_sha256": "2279dc1ecab2f2fa52f4a7264b6c3ca7a117414f3585b54ec7ce12503ca2ce42",
+      "gt_sha256": "9cb734beb7a410e8b3f9a594f2bdaf6602b90855806d6201ed2a647d05c09873",
+      "row_count": 4000,
+      "valid_count": 4000,
+      "invalid_count": 0,
+      "evidence_file": "paper_experiment_evidence/ablation/experiment3_qwen30b_strict_hand/predictions/qwen3_vl_30b_no_hand_strict.csv"
+    }
+  }
+}

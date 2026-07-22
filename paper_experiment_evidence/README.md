@@ -1,6 +1,6 @@
 # VR-TriRef Paper Experiment Evidence
 
-This compact evidence bundle is rebuilt from the final VR-TriRef evaluator outputs at source commit `ad190b747f73a8c613148cd6813a3a98e43c8818`. Existing model outputs were not edited: the newly evaluable interactions were inferred with each run's recorded configuration, then all metrics were recomputed with one evaluator per experiment.
+The core nine-model evidence bundle was rebuilt from the final VR-TriRef evaluator outputs at source commit `ad190b747f73a8c613148cd6813a3a98e43c8818`. The strict Experiment 3 hand-input extension uses implementation commit `2bab7fe8f80cf3d8981fa2bb8239f0c612b33f15`. Existing model outputs were not edited; all metrics use the recorded evaluator for their experiment.
 
 ## Experiments and denominators
 
@@ -16,6 +16,6 @@ Qwen3-VL-8B Exp.1's paper run is `qwen8/outputs/exam1_qwen3vl8b_baseline`, reeva
 
 ## Ablations and limits
 
-The Exp.1/Exp.2 ablations are descriptive hybrid/input/preprocessing/prompt ablations, not strict single-modality causal ablations. Experiment 3 additionally contains five Qwen3-VL-30B post-selection input ablations under `ablation/experiment3_qwen30b/`. Its frozen frame selector used gaze/hand signals before masking, and the prompt explicitly exposes copyable gaze hypotheses, so these results are also descriptive rather than strict causal modality estimates. No bootstrap samples exist beyond the header-only file, so no p-value, significance, or confidence interval is reported.
+The Exp.1/Exp.2 ablations are descriptive hybrid/input/preprocessing/prompt ablations, not strict single-modality causal ablations. Experiment 3 contains five descriptive controls under `ablation/experiment3_qwen30b/` and a strict model-input hand control under `ablation/experiment3_qwen30b_strict_hand/`. The strict control removes hand fields and masks visible projected hand regions, but its frozen frame selector used hand signals before masking; it is therefore not an end-to-end causal pipeline intervention. No bootstrap samples exist beyond the header-only file, so no p-value, significance, or confidence interval is reported.
 
 The explicit location/region taxonomy contains 37 canonical anchors and identifies 1372 interactions. The old 1,461 count is not reproducible because no committed taxonomy supported it; it must not be cited.

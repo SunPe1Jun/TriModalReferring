@@ -161,6 +161,7 @@ Baseline：
 | no_visual | 4000 | 0.4341 | +0.0014 | 0.0180 | 0.2518 | 0.4120 | 0.1560 |
 | no_gaze | 4000 | 0.0673 | -0.3653 | 0.0013 | 0.0055 | 0.0263 | 0.3771 |
 | no_hand | 4000 | 0.4353 | +0.0027 | 0.0187 | 0.2527 | 0.4134 | 0.1558 |
+| no_hand_strict | 4000 | 0.4351 | +0.0025 | 0.0187 | 0.2525 | 0.4132 | 0.1558 |
 | no_gaze_hand | 3999 | 0.0542 | -0.3784 | 0.0000 | 0.0000 | 0.0037 | 0.5376 |
 | no_instruction | 4000 | 0.4332 | +0.0006 | 0.0177 | 0.2510 | 0.4111 | 0.1565 |
 
@@ -168,10 +169,10 @@ Baseline：
 
 1. 移除 gaze 后 Anchor F1 从 `0.4326` 降至 `0.0673`，Margin-F1@1.0 从 `0.2503` 降至 `0.0055`，表明当前 v9 协议强依赖模型可见的 gaze point hypotheses。
 
-2. `no_visual`、`no_hand` 和 `no_instruction` 与 full 几乎一致，且分别有 `98.40%`、`96.95%`、`98.65%` 的样本输出完全相同。这并不证明这些模态在一般指代任务中无用，而是说明当前 prompt 默认要求复制 gaze hypotheses，使其主导了模型输出。
+2. `no_visual`、`no_hand`、`no_hand_strict` 和 `no_instruction` 与 full 几乎一致；其中严格移除 hand telemetry 并遮盖可见手势后的 `no_hand_strict` Anchor F1 为 `0.4351`，仍有 `96.92%` 的样本输出与 Full 完全相同。这不证明 hand 在一般指代任务中无用，而说明当前 prompt 默认复制 gaze hypotheses，使其主导模型输出。
 
-3. 冻结的 target-free frame selector 在遮蔽前使用了 gaze/hand availability 与 stability。因此 `no_gaze`、`no_hand`、`no_gaze_hand` 属于 post-selection input ablation，不能写成严格的单模态因果消融。
+3. `no_hand_strict` 对 11,001 个 panel 全部生成独立输入图，其中 9,323 个 panel 的画内手部被中性灰遮盖，1,678 个 panel 的 tracked hand 投影在画外；4,000 条输出全部有效。它是严格的模型输入级 hand 消融，但冻结的 target-free frame selector 在遮蔽前使用了 hand availability 与 stability，因此仍不能写成整个 pipeline 的严格单模态因果消融。
 
 4. `no_gaze_hand` 有一条 invalid：`scene4_room1::32` 输出了六维 point。该样本作为空预测保留在 4,000 分母中，未人工修改模型输出。
 
-完整报告见 `ablation/exam3/reports/full_v3/EXPERIMENT3_QWEN30B_ABLATION.md`，逐样本紧凑证据见 `paper_experiment_evidence/ablation/experiment3_qwen30b/`。
+完整报告见 `ablation/exam3/reports/full_v3/EXPERIMENT3_QWEN30B_ABLATION.md` 和 `ablation/exam3/reports/strict_hand_v1/EXPERIMENT3_QWEN30B_ABLATION.md`；严格手部消融逐样本证据见 `paper_experiment_evidence/ablation/experiment3_qwen30b_strict_hand/`。

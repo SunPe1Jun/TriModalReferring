@@ -18,6 +18,7 @@ INPUT_MASKS = {
     "no_visual": "remove image tensors and image paths",
     "no_gaze": "remove gaze telemetry, hypotheses, distances, and gaze-derived selection metadata",
     "no_hand": "remove hand telemetry, hypotheses, distances, and hand-derived selection metadata",
+    "no_hand_strict": "remove hand telemetry and mask projected hand regions in every frozen evidence panel",
     "no_gaze_hand": "remove both gaze and hand cue families and their derived metadata",
     "no_instruction": "remove event instruction and utterance values while retaining task instructions",
 }
@@ -84,6 +85,7 @@ def main() -> None:
     parser.add_argument("--gt_manifest", default="exam3_point_grounding/outputs_full_v9_20260709/gt_manifest_eval.csv")
     parser.add_argument("--summary_dir", default="ablation/exam3/reports/full_v3")
     parser.add_argument("--evidence_dir", default="paper_experiment_evidence/ablation/experiment3_qwen30b")
+    parser.add_argument("--variants", nargs="+", default=list(VARIANTS))
     args = parser.parse_args()
 
     root = Path(args.repo_root).resolve()
@@ -127,7 +129,8 @@ def main() -> None:
     gt_hash = digest(
         f"{key}:{gt_by_id[key]['gt_anchor_ids']}:{gt_by_id[key]['gt_points_json']}" for key in expected_ids
     )
-    for variant in VARIANTS:
+    variants = tuple(args.variants)
+    for variant in variants:
         variant_root = output_root / variant
         pred_rows = read_csv(variant_root / "predictions.csv")
         detail_rows = read_csv(variant_root / "eval/evaluation_detail.csv")
@@ -284,7 +287,7 @@ def main() -> None:
         json.dumps({"validation_pass": True, "variants": validation}, indent=2) + "\n",
         encoding="utf-8",
     )
-    print(json.dumps({"variants": len(VARIANTS), "rows_per_variant": 4000, "invalid_outputs": len(invalid_rows),
+    print(json.dumps({"variants": len(variants), "rows_per_variant": 4000, "invalid_outputs": len(invalid_rows),
                       "evidence_dir": str(evidence_dir)}, indent=2))
 
 

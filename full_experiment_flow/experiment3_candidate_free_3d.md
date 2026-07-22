@@ -35,6 +35,8 @@ Removing model-visible gaze cues reduces anchor F1 from 0.4326 to 0.0673 and Mar
 
 The five variants each contain 4,000 samples. One `no_gaze_hand` output is invalid and remains an empty prediction in the denominator. Detailed results and compact evidence are under `ablation/exam3/reports/full_v3/` and `paper_experiment_evidence/ablation/experiment3_qwen30b/`.
 
+A stricter hand-input control removes all structured hand fields and masks projected hand regions in every frozen panel. It obtains anchor F1 0.4351 and Margin-F1@1.0 0.2525, versus 0.4326 and 0.2503 for Full; 96.92% of outputs are identical. Thus the current v9 experiment provides no evidence of an independent hand contribution once copyable gaze hypotheses are exposed. This control remains post-selection because the frozen selector used hand availability.
+
 ## Completion Evidence
 
 - Qwen3-VL-8B merged evaluation: `qwen8/outputs/exam3_qwen3vl8b_point_grounding_merged_20260713/eval/evaluation_summary.json`

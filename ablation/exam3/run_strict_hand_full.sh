@@ -56,6 +56,22 @@ run_shard 1 1 &
 pid1=$!
 wait "${pid0}" "${pid1}"
 
+mkdir -p "${OUTPUT_ROOT}/no_hand_strict"
+printf '%s\n' \
+  "variant=no_hand_strict" \
+  "model_name=/workspace/usr3/Qwen3-VL-30B-A3B-Instruct" \
+  "manifest=${MANIFEST}" \
+  "gt_manifest=${GT_MANIFEST}" \
+  "cuda_visible_devices=0,1" \
+  "parallel_shards=2" \
+  "max_new_tokens=512" \
+  "dtype=auto" \
+  "do_sample=false" \
+  "prompt_template=exam3_point_grounding/prompts/qwen3vl_point_grounding.md" \
+  "hand_mask_root=${HAND_MASK_ROOT}" \
+  "hand_mask_audit=${MASK_AUDIT}" \
+  > "${OUTPUT_ROOT}/no_hand_strict/run_config.txt"
+
 python ablation/exam3/merge_strict_hand_shards.py \
   --prediction_csvs \
     "${SHARD_ROOT}/shard0/no_hand_strict/predictions.csv" \

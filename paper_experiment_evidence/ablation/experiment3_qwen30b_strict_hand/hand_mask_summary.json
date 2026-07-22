@@ -1,0 +1,16 @@
+{
+  "mask_version": "hand_mask_v1",
+  "sample_count": 4000,
+  "panel_count": 11001,
+  "status_counts": {
+    "masked": 9323,
+    "tracked_offscreen": 1678
+  },
+  "masked_panel_count": 9323,
+  "tracked_offscreen_panel_count": 1678,
+  "no_tracked_hand_panel_count": 0,
+  "mean_mask_fraction": 0.11387773901374357,
+  "max_abs_sample_time_delta": 0.0,
+  "unique_sample_count": 4000,
+  "validation_pass": true
+}

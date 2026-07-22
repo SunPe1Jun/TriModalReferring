@@ -57,11 +57,14 @@ Experiment 3 uses the frozen v9 candidate-free measured point-hypothesis protoco
 | no_visual | 4000 | 0.4341 | +0.0014 | 0.0180 | 0.2518 | 0.4120 | 0.1560 |
 | no_gaze | 4000 | 0.0673 | -0.3653 | 0.0013 | 0.0055 | 0.0263 | 0.3771 |
 | no_hand | 4000 | 0.4353 | +0.0027 | 0.0187 | 0.2527 | 0.4134 | 0.1558 |
+| no_hand_strict | 4000 | 0.4351 | +0.0025 | 0.0187 | 0.2525 | 0.4132 | 0.1558 |
 | no_gaze_hand | 3999 | 0.0542 | -0.3784 | 0.0000 | 0.0000 | 0.0037 | 0.5376 |
 | no_instruction | 4000 | 0.4332 | +0.0006 | 0.0177 | 0.2510 | 0.4111 | 0.1565 |
 
-The result is dominated by exposed copyable gaze hypotheses: removing gaze causes a large degradation, whereas removing visual input, hand telemetry, or event instruction barely changes predictions. Since the target-free selector itself used gaze/hand availability, these are descriptive post-selection input ablations rather than strict causal modality interventions.
+The result is dominated by exposed copyable gaze hypotheses: removing gaze causes a large degradation, whereas removing visual input, event instruction, or both structured and visible hand evidence barely changes predictions. `no_hand_strict` masks projected hand regions in all frozen panels and remains within +0.0025 anchor F1 of Full, with 96.92% identical outputs. Since the target-free selector itself used gaze/hand availability, this is a strict model-input hand ablation after selection, not a strict causal pipeline intervention.
 
 - Experiment 3 runner: `ablation/exam3/run_parallel_full.sh`
 - Unified report: `ablation/exam3/reports/full_v3/EXPERIMENT3_QWEN30B_ABLATION.md`
 - Compact evidence: `paper_experiment_evidence/ablation/experiment3_qwen30b/`
+- Strict hand report: `ablation/exam3/reports/strict_hand_v1/EXPERIMENT3_QWEN30B_ABLATION.md`
+- Strict hand evidence: `paper_experiment_evidence/ablation/experiment3_qwen30b_strict_hand/`

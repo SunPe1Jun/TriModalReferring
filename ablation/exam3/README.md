@@ -49,6 +49,7 @@ The five 4,000-sample Qwen3-VL-30B runs are complete. The authoritative report i
 | no_visual | 4,000 | 0.4341 | 0.0180 | 0.2518 | 0.4120 | 0.1560 |
 | no_gaze | 4,000 | 0.0673 | 0.0013 | 0.0055 | 0.0263 | 0.3771 |
 | no_hand | 4,000 | 0.4353 | 0.0187 | 0.2527 | 0.4134 | 0.1558 |
+| no_hand_strict | 4,000 | 0.4351 | 0.0187 | 0.2525 | 0.4132 | 0.1558 |
 | no_gaze_hand | 3,999 | 0.0542 | 0.0000 | 0.0000 | 0.0037 | 0.5376 |
 | no_instruction | 4,000 | 0.4332 | 0.0177 | 0.2510 | 0.4111 | 0.1565 |
 
@@ -71,4 +72,4 @@ setsid bash ablation/exam3/run_strict_hand_full.sh \
   > ablation/exam3/logs/strict_hand_full_launcher.log 2>&1 < /dev/null &
 ```
 
-The mask geometry and per-panel coverage audit are stored under `ablation/exam3/hand_masked_frames_v1_full_audit.json`; raw model outputs remain in the strict run output directory and are separate from the earlier descriptive ablation.
+The full strict run is complete: 4,000/4,000 outputs are valid, anchor F1 is 0.4351, and 3,877/4,000 outputs are identical to Full. The mask geometry and per-panel coverage audit are stored under `ablation/exam3/hand_masked_frames_v1_full_audit.json`; raw model outputs remain in the strict run output directory and are separate from the earlier descriptive ablation. The final report is `ablation/exam3/reports/strict_hand_v1/EXPERIMENT3_QWEN30B_ABLATION.md`.
