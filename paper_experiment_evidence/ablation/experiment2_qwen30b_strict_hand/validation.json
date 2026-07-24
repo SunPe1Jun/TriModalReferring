@@ -1,0 +1,36 @@
+{
+  "validation_pass": true,
+  "checks": {
+    "prediction_rows_4000": true,
+    "unique_ids_4000": true,
+    "sample_set_matches_final_gt": true,
+    "all_predictions_have_panel_audit": true,
+    "all_masked_input_files_exist": true,
+    "all_model_input_paths_are_masked": true,
+    "mask_statuses_valid": true
+  },
+  "sample_set_sha256": "2279dc1ecab2f2fa52f4a7264b6c3ca7a117414f3585b54ec7ce12503ca2ce42",
+  "prediction_count": 4000,
+  "valid_count": 4000,
+  "invalid_count": 0,
+  "mask_summary": {
+    "mask_version": "hand_mask_v1",
+    "sample_count": 4000,
+    "panel_count": 11834,
+    "status_counts": {
+      "masked": 9811,
+      "no_tracked_hand": 15,
+      "tracked_offscreen": 2008
+    },
+    "masked_panel_count": 9811,
+    "tracked_offscreen_panel_count": 2008,
+    "no_tracked_hand_panel_count": 15,
+    "mean_mask_fraction": 0.11394048668244043,
+    "median_mask_fraction": 0.1241923,
+    "max_mask_fraction": 0.89223633,
+    "panels_over_25_percent": 358,
+    "panels_over_50_percent": 48,
+    "all_saved_model_input_files_exist": true,
+    "all_model_input_paths_are_masked": true
+  }
+}

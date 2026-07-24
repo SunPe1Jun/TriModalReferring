@@ -1,0 +1,6 @@
+scene,row_index,unified_id,panel_id,mask_fraction,status
+scene5,366,scene5::366,P1,0.00787055,masked
+scene3,40,scene3::40,P3,0.14435303,masked
+scene3,126,scene3::126,P2,0.21524658,masked
+scene1,278,scene1::278,P2,0.38379286,masked
+scene3,65,scene3::65,P3,0.89223633,masked

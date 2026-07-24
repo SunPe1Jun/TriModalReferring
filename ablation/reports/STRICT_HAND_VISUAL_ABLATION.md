@@ -72,3 +72,14 @@ Full-run output roots:
 
 - `ablation/exam1/outputs_strict_hand_v1_full/no_hand_strict/`
 - `ablation/exam2/outputs_strict_hand_v1_full/no_hand_strict/`
+
+## Full-run qualification
+
+The full runs completed, but the v1 mask did not pass semantic visual
+qualification. A manual comparison of the recorded source and model-input
+panels found visible rendered hands outside the projected rectangles in
+multiple samples, while some other rectangles covered most of the scene. The
+full-run metrics are preserved as an engineering diagnostic, not as a
+paper-ready strict causal modality result. See
+`paper_experiment_evidence/ablation/STRICT_HAND_ABLATION_AUDIT.md` for the
+sample IDs, mask fractions, and delivery files.

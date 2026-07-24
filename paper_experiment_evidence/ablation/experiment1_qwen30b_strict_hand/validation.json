@@ -1,0 +1,35 @@
+{
+  "validation_pass": true,
+  "checks": {
+    "prediction_rows_4000": true,
+    "unique_ids_4000": true,
+    "sample_set_matches_final_gt": true,
+    "all_predictions_have_mask_audit": true,
+    "mask_statuses_valid": true,
+    "structured_hand_prompt_leaks_zero": true
+  },
+  "sample_set_sha256": "2279dc1ecab2f2fa52f4a7264b6c3ca7a117414f3585b54ec7ce12503ca2ce42",
+  "prediction_count": 4000,
+  "valid_count": 3969,
+  "invalid_count": 31,
+  "mask_summary": {
+    "mask_version": "hand_mask_v1",
+    "sample_count": 4000,
+    "frame_count": 60988,
+    "status_counts": {
+      "masked": 51191,
+      "tracked_offscreen": 9715,
+      "no_tracked_hand": 82
+    },
+    "masked_frame_count": 51191,
+    "tracked_offscreen_frame_count": 9715,
+    "no_tracked_hand_frame_count": 82,
+    "mean_mask_fraction": 0.11691514721806186,
+    "median_mask_fraction": 0.1258566623263889,
+    "max_mask_fraction": 0.9154307725694445,
+    "frames_over_25_percent": 3331,
+    "frames_over_50_percent": 204,
+    "prompt_structured_hand_leak_count": 0,
+    "prompt_structured_hand_leak_ids": []
+  }
+}

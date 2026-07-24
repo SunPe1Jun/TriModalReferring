@@ -1,0 +1,20 @@
+{
+  "mask_version": "hand_mask_v1",
+  "sample_count": 4000,
+  "frame_count": 60988,
+  "status_counts": {
+    "masked": 51191,
+    "tracked_offscreen": 9715,
+    "no_tracked_hand": 82
+  },
+  "masked_frame_count": 51191,
+  "tracked_offscreen_frame_count": 9715,
+  "no_tracked_hand_frame_count": 82,
+  "mean_mask_fraction": 0.11691514721806186,
+  "median_mask_fraction": 0.1258566623263889,
+  "max_mask_fraction": 0.9154307725694445,
+  "frames_over_25_percent": 3331,
+  "frames_over_50_percent": 204,
+  "prompt_structured_hand_leak_count": 0,
+  "prompt_structured_hand_leak_ids": []
+}
